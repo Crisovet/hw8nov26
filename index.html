@@ -1270,10 +1270,10 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
 .thumbs img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border: 2px solid var(--line); border-radius: 10px; }
 .bar-track { height: 10px; border-radius: 6px; background: var(--sample); border: 2px solid var(--line); overflow: hidden; }
 .bar-fill { height: 100%; width: 0; background: var(--ell-line); transition: width .25s; }
-#send-photos:disabled { opacity: 0.65; cursor: not-allowed; }
-#send-photos.sent { opacity: 1; color: #6fe0a0; }
-:root[data-theme="dark"] #send-photos.sent { color: #1c7a3f; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #send-photos.sent { color: #1c7a3f; } }
+#gate .start-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+#gate #send-photos.sent { opacity: 1; color: #6fe0a0; }
+:root[data-theme="dark"] #gate #send-photos.sent { color: #1c7a3f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #gate #send-photos.sent { color: #1c7a3f; } }
 .verified { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; color: #1c7a3f; }
 :root[data-theme="dark"] .verified { color: #6fe0a0; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .verified { color: #6fe0a0; } }
@@ -1814,8 +1814,8 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
   document.getElementById('check-cancel').addEventListener('click', closeGate);
   document.getElementById('send-photos').addEventListener('click', function () {
     if (this.disabled) return;
-    this.disabled = true; this.textContent = 'Sending\u2026';
-    document.getElementById('check-actions').hidden = true;
+    Array.prototype.forEach.call(document.querySelectorAll('#gate button'), function (b) { b.disabled = true; });
+    this.textContent = 'Sending\u2026';
     document.getElementById('check-spin').hidden = false;
     var cs = document.getElementById('check-status'); cs.className = 'cam-status'; cs.textContent = 'Sending your photos and scores\u2026 please wait';
     verifiedOnce = true;
