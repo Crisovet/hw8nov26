@@ -1,0 +1,1842 @@
+<title>Geometry Homework</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+/* Phone safety net: never scroll sideways */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; max-width: 100%; overflow-x: hidden; }
+body { max-width: 100%; overflow-x: hidden; overflow-wrap: break-word; }
+svg, img { max-width: 100%; }
+.scroll { max-width: 100%; }
+@media (max-width: 560px) {
+  .masthead { padding: 18px 14px; }
+  .col { padding: 14px 14px 16px; }
+  .remember { padding: 12px 14px; }
+  .trail { padding-inline: 0; }
+  th, td { overflow-wrap: anywhere; }
+}
+</style>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: a two-column worksheet grid. Each card pairs a worked "Sample Question" with a "Now You Try" twin, then a "Remember" strip. Questions 5 and 10 span the full width. */
+:root {
+  --bg: #eef2f8;
+  --ink: #1b2230;
+  --muted: #566074;
+  --line: #1b2230;
+  --head: #cfe3f7;
+  --sample: #e8f0fa;
+  --sample-tag: #b9d6f2;
+  --try: #e6f3ea;
+  --try-tag: #b5e6cc;
+  --try-rule: #7fb796;
+  --remember: #fadadd;
+  --red: #b3202a;
+  --note: #fdf1c4;
+  --note-rule: #f0a62b;
+  --thead: #fdf0bd;
+  --paper: #ffffff;
+  --ell-fill: rgba(70, 120, 220, 0.16);
+  --ell-line: #3454b4;
+  --badge-bg: #111722;
+  --badge-fg: #ffffff;
+  --challenge: #f5a623;
+  --challenge-fg: #1b1200;
+  --font-display: "Bitter", Georgia, "Times New Roman", serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151c; --ink: #e8ecf3; --muted: #a2adc0; --line: #cfd7e6;
+    --head: #1d3550; --sample: #172435; --sample-tag: #28486b;
+    --try: #16281e; --try-tag: #29583e; --try-rule: #3f7a58;
+    --remember: #3a1e22; --red: #ff909a; --note: #3a3216; --note-rule: #d29a2e;
+    --thead: #3a3416; --paper: #1a2029;
+    --ell-fill: rgba(120, 160, 255, 0.18); --ell-line: #8fb0ff;
+    --badge-bg: #e8ecf3; --badge-fg: #11151c;
+    --challenge: #f5a623; --challenge-fg: #1b1200;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151c; --ink: #e8ecf3; --muted: #a2adc0; --line: #cfd7e6;
+  --head: #1d3550; --sample: #172435; --sample-tag: #28486b;
+  --try: #16281e; --try-tag: #29583e; --try-rule: #3f7a58;
+  --remember: #3a1e22; --red: #ff909a; --note: #3a3216; --note-rule: #d29a2e;
+  --thead: #3a3416; --paper: #1a2029;
+  --ell-fill: rgba(120, 160, 255, 0.18); --ell-line: #8fb0ff;
+  --badge-bg: #e8ecf3; --badge-fg: #11151c;
+  --challenge: #f5a623; --challenge-fg: #1b1200;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  padding-block: 24px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.sheet { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+
+/* Header */
+.masthead {
+  background: var(--head);
+  border: 3px solid var(--line);
+  border-radius: 22px;
+  padding: 22px 20px;
+  text-align: center;
+}
+.masthead h1 { font-size: clamp(1.4rem, 4.2vw, 2.3rem); font-weight: 700; letter-spacing: 0.01em; }
+.masthead .sub { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.1rem, 2.8vw, 1.5rem); margin-top: 6px; }
+.masthead .meta { color: var(--muted); margin-top: 2px; }
+.masthead .meta b { color: var(--ink); letter-spacing: 0.06em; }
+
+/* Criteria */
+.table-wrap { border: 3px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--paper); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 0; }
+th, td { text-align: left; padding: 12px 18px; vertical-align: middle; }
+th { background: var(--thead); font-family: var(--font-display); font-size: 1.15rem; border-bottom: 2px solid var(--line); }
+th:first-child, td:first-child { border-right: 2px solid var(--line); width: 56%; }
+tbody tr + tr td { border-top: 2px solid var(--line); }
+
+/* Cards */
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.card {
+  position: relative;
+  border: 3px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--sample);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.card.wide { grid-column: 1 / -1; }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); flex: 1; }
+.col { padding: 16px 18px 18px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.col.sample { background: var(--sample); }
+.col.try { background: var(--try); border-left: 3px solid var(--try-rule); }
+.tag-row { display: flex; align-items: center; gap: 10px; }
+.badge {
+  flex: none; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--badge-bg); color: var(--badge-fg);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.2rem;
+}
+.tag {
+  flex: 1; text-align: center; padding: 6px 10px; border-radius: 10px;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+}
+.sample .tag { background: var(--sample-tag); }
+.try .tag { background: var(--try-tag); }
+.col.try .tag-row { padding-left: 0; }
+.q { margin: 0; }
+.q b { font-weight: 600; }
+.opts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.opts li { display: flex; gap: 8px; }
+.opts .k { font-weight: 600; flex: none; }
+.diagram { display: block; width: 100%; max-width: 360px; height: auto; margin-inline: auto; color: var(--ink); }
+.answer { margin: 0; }
+.answer .a { color: var(--red); font-weight: 700; }
+.explain { margin: 0; }
+.explain b { font-weight: 600; }
+.remember {
+  background: var(--remember); color: var(--red);
+  padding: 12px 18px; border-top: 2px solid var(--line);
+  line-height: 1.5;
+}
+.remember b { font-weight: 700; }
+.badge-challenge {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  background: var(--challenge); color: var(--challenge-fg);
+  font-family: var(--font-display); font-weight: 700; font-size: 0.9rem;
+  padding: 3px 14px; border-radius: 0 0 10px 10px; border: 2px solid var(--line); border-top: 0;
+  z-index: 1;
+}
+.note {
+  background: var(--note); border-left: 4px solid var(--note-rule);
+  padding: 8px 12px; font-size: 0.95rem; border-radius: 4px;
+}
+.note b { font-weight: 600; }
+
+/* Student inputs */
+.choices { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.choices label {
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  padding: 4px 8px; margin-inline: -8px; border-radius: 8px;
+}
+.choices label:hover { background: rgba(127, 183, 150, 0.2); }
+.choices input { accent-color: var(--ell-line); width: 18px; height: 18px; flex: none; }
+.blank-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.blank-row label { font-weight: 600; }
+.blank {
+  font: inherit; color: var(--ink); background: transparent;
+  border: 0; border-bottom: 2px solid var(--ink);
+  min-width: 0; width: min(11em, 100%); padding: 2px 4px; border-radius: 0;
+}
+.blank:focus-visible, .choices input:focus-visible { outline: 3px solid var(--ell-line); outline-offset: 2px; }
+.ans-label { font-weight: 700; }
+
+/* SVG */
+.ln { stroke: var(--ink); stroke-width: 1.7; fill: none; stroke-linecap: round; }
+.dash { stroke: var(--ink); stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+.rd { stroke: var(--red); stroke-width: 1.8; fill: none; }
+.lbl { fill: var(--ink); font-family: var(--font-body); font-style: italic; font-size: 17px; }
+.rlbl { fill: var(--red); font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+.qm { fill: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 18px; }
+.cap { fill: var(--muted); font-family: var(--font-body); font-size: 10.5px; }
+.nm { fill: var(--muted); font-family: var(--font-body); font-size: 12px; }
+.sh { fill: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 12px; }
+.ell { fill: var(--ell-fill); stroke: var(--ell-line); stroke-width: 1.4; }
+
+/* Student details popup */
+.who { margin-top: 10px; font-weight: 600; display: flex; justify-content: center; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.link-btn { font: inherit; font-weight: 600; color: var(--ell-line); background: none; border: 0; padding: 2px 4px; cursor: pointer; text-decoration: underline; }
+.link-btn:focus-visible { outline: 3px solid var(--ell-line); outline-offset: 2px; }
+.overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(10, 16, 28, 0.62);
+  display: grid; place-items: center;
+  padding-block: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-y: auto;
+}
+.overlay[hidden] { display: none; }
+.modal {
+  width: min(460px, 100%);
+  background: var(--paper);
+  border: 3px solid var(--line);
+  border-radius: 20px;
+  padding: 22px 22px 24px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.modal h2 { font-size: 1.35rem; }
+.modal p { margin: 0; color: var(--muted); }
+.modal .actions { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.start-btn {
+  font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+  color: var(--badge-fg); background: var(--badge-bg);
+  border: 0; border-radius: 12px; padding: 12px 18px; cursor: pointer;
+}
+.start-btn:focus-visible { outline: 3px solid var(--ell-line); outline-offset: 3px; }
+.err { color: var(--red); font-weight: 600; min-height: 1.4em; margin: 0; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-family: var(--font-display); font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.field input {
+  font: inherit; color: var(--ink); background: var(--sample);
+  border: 2px solid var(--line); border-radius: 10px;
+  padding: 8px 12px; min-width: 0; width: 100%;
+}
+.phone-wrap { display: flex; align-items: stretch; border: 2px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--sample); }
+.phone-wrap:focus-within { outline: 3px solid var(--ell-line); outline-offset: 2px; }
+.phone-wrap .cc { display: flex; align-items: center; padding: 8px 12px; background: var(--head); border-right: 2px solid var(--line); font-family: var(--font-display); font-weight: 700; user-select: none; -webkit-user-select: none; }
+.field .phone-wrap input { border: 0; border-radius: 0; background: transparent; flex: 1; min-width: 0; width: auto; }
+.field .phone-wrap input:focus-visible { outline: none; }
+.field input::placeholder { color: var(--muted); opacity: 0.8; }
+.field input:focus-visible { outline: 3px solid var(--ell-line); outline-offset: 2px; }
+
+.topic {
+  background: var(--head); border-bottom: 2px solid var(--line);
+  padding: 7px 18px; font-family: var(--font-display); font-weight: 500;
+  font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.topic b { font-weight: 700; }
+.card.wide .topic { padding-right: 130px; }
+.submit-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 8px 0 4px; }
+.submit-card .start-btn { width: min(100%, 360px); }
+.submit-card .start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.submit-msg { margin: 0; text-align: center; font-weight: 600; min-height: 1.5em; }
+.submit-msg.bad { color: var(--red); }
+.submit-msg.good { color: var(--ink); }
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  /* Larger popups on phones */
+  .modal { width: 100%; padding: 30px 22px 32px; gap: 18px; }
+  .modal h2 { font-size: 1.7rem; }
+  .modal p { font-size: 1.05rem; }
+  .modal .field label { font-size: 0.95rem; }
+  .modal .field input { font-size: 1.2rem; padding: 15px 14px; border-radius: 12px; }
+  .modal .phone-wrap { border-radius: 12px; }
+  .modal .phone-wrap .cc { font-size: 1.2rem; padding: 15px 14px; }
+  .modal .start-btn { font-size: 1.2rem; padding: 17px 20px; }
+  .err { font-size: 1.05rem; }
+  .pair { grid-template-columns: minmax(0, 1fr); }
+  .col.try { border-left: 0; border-top: 3px solid var(--try-rule); }
+  th, td { padding: 10px 12px; }
+  th:first-child, td:first-child { width: 50%; }
+  .badge-challenge { left: auto; right: 14px; transform: none; }
+}
+</style>
+
+<style>
+/* Results dashboard tokens and styles */
+:root { --good: #17794a; --good-bg: #dcf1e5; --bad-bg: #fbe1e4; --ring-bg: #d3dbe8; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --good: #6fdca0; --good-bg: #15321f; --bad-bg: #3a1e22; --ring-bg: #2a3547; }
+}
+:root[data-theme="dark"] { --good: #6fdca0; --good-bg: #15321f; --bad-bg: #3a1e22; --ring-bg: #2a3547; }
+
+.res-head { background: var(--head); border: 3px solid var(--line); border-radius: 22px; padding: 22px 20px; text-align: center; }
+.res-head h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); }
+.res-eyebrow { font-family: var(--font-display); font-weight: 500; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.res-who { margin-top: 6px; font-weight: 600; }
+.overview { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 20px; }
+.ring-card { background: var(--paper); border: 3px solid var(--line); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; }
+.ring { width: min(100%, 190px); height: auto; }
+.ring-bg { fill: none; stroke: var(--ring-bg); stroke-width: 12; }
+.ring-fg { fill: none; stroke: var(--good); stroke-width: 12; stroke-linecap: round; }
+.ring.low .ring-fg { stroke: var(--red); }
+.ring-num { font-family: var(--font-display); font-weight: 700; font-size: 28px; fill: var(--ink); }
+.ring-pct { font-family: var(--font-body); font-size: 14px; fill: var(--muted); }
+.verdict { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; text-align: center; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.stat { background: var(--paper); border: 3px solid var(--line); border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; }
+.stat .k { font-family: var(--font-display); font-weight: 500; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.stat .v { font-family: var(--font-display); font-weight: 700; font-size: 1.8rem; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.stat .v small { font-size: 1rem; font-weight: 500; color: var(--muted); }
+.panel { background: var(--paper); border: 3px solid var(--line); border-radius: 18px; padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.panel h2 { font-size: 1.15rem; }
+.tmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.tile { border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; border: 2px solid transparent; min-width: 0; }
+.tile.good { background: var(--good-bg); border-color: var(--good); }
+.tile.bad { background: var(--bad-bg); border-color: var(--red); }
+.tile .tq { font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em; }
+.tile .tn { font-weight: 600; line-height: 1.25; }
+.tile .ts { font-size: 0.85rem; font-weight: 700; }
+.tile.good .ts { color: var(--good); }
+.tile.bad .ts { color: var(--red); }
+.rev { border-left: 4px solid var(--red); background: var(--bad-bg); padding: 10px 14px; border-radius: 6px; }
+.rev h3 { font-size: 1rem; }
+.rev p { margin: 4px 0 0; }
+.allgood { background: var(--good-bg); border-left: 4px solid var(--good); padding: 10px 14px; border-radius: 6px; font-weight: 600; }
+.qrev { border: 2px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.qh { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--head); flex-wrap: wrap; }
+.qh .qn { font-family: var(--font-display); font-weight: 700; }
+.qh .qt { font-weight: 600; min-width: 0; }
+.pill-res { margin-left: auto; font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; padding: 2px 10px; border-radius: 999px; border: 1.5px solid; }
+.pill-res.good { background: var(--good-bg); color: var(--good); border-color: var(--good); }
+.pill-res.bad { background: var(--bad-bg); color: var(--red); border-color: var(--red); }
+.qb { padding: 10px 14px 12px; display: grid; gap: 4px; }
+.qb .why { color: var(--muted); margin-top: 4px; }
+.back-row { display: flex; justify-content: center; }
+.back-row .start-btn { width: min(100%, 360px); }
+.res-overlay { place-items: start center; grid-template-columns: minmax(0, 1fr); overflow-x: hidden; }
+.res-modal {
+  position: relative; width: min(880px, 100%); min-width: 0; box-sizing: border-box; margin-block: auto; margin-inline: auto;
+  background: var(--bg); border: 3px solid var(--line); border-radius: 22px;
+  padding: 54px 18px 22px;
+}
+.x-btn {
+  position: absolute; top: 10px; right: 12px; width: 38px; height: 38px;
+  border-radius: 50%; border: 2px solid var(--line); background: var(--paper); color: var(--ink);
+  font-size: 1.5rem; line-height: 1; cursor: pointer;
+}
+.res-modal .sheet, .res-modal .panel, .res-modal .overview, .res-modal .ring-card, .res-modal .stats { min-width: 0; max-width: 100%; }
+@media (max-width: 480px) { .res-modal { padding: 52px 10px 18px; border-radius: 18px; } .res-overlay { padding-left: 8px; padding-right: 8px; } }
+.x-btn:focus-visible { outline: 3px solid var(--ell-line); outline-offset: 2px; }
+@media (max-width: 700px) { .overview { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<style>
+/* Results dashboard: livelier palette, motion and layout */
+:root { --t1: #2f6fe4; --t2: #e8742c; --t3: #12a594; --t4: #d8408f; --t5: #c98f00; --head2: #d3ecd0; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --t1: #7aa7ff; --t2: #ffa066; --t3: #4fd8c7; --t4: #ff8cc0; --t5: #ffd166; --head2: #1d3d3a; }
+}
+:root[data-theme="dark"] { --t1: #7aa7ff; --t2: #ffa066; --t3: #4fd8c7; --t4: #ff8cc0; --t5: #ffd166; --head2: #1d3d3a; }
+
+.res-head { position: relative; overflow: hidden; background: linear-gradient(115deg, var(--head) 30%, var(--head2)); }
+.res-head > * { position: relative; }
+.proto { position: absolute !important; right: -10px; bottom: -34px; width: 210px; height: auto; opacity: 0.35; color: var(--ell-line); pointer-events: none; }
+.res-head h1 { margin-top: 2px; }
+.stars { width: 150px; height: auto; display: block; margin: 8px auto 0; }
+.star { fill: none; stroke: var(--muted); stroke-width: 1.4; stroke-linejoin: round; }
+.star.on { fill: var(--t5); stroke: var(--t5); transform-box: fill-box; transform-origin: center; animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) backwards; animation-delay: calc(0.5s + var(--i) * 0.12s); }
+.ring-fg { animation: ringfill 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards; }
+.ring-card { background: linear-gradient(180deg, var(--paper), color-mix(in srgb, var(--good) 8%, var(--paper))); }
+.ring.low ~ .verdict { color: var(--red); }
+.stat { border-top-width: 3px; position: relative; }
+.stat::before { content: ""; position: absolute; left: -3px; right: -3px; top: -3px; height: 8px; background: var(--sc, var(--t1)); border-radius: 14px 14px 0 0; }
+.stat .k { padding-top: 6px; }
+.trail { display: flex; justify-content: space-between; gap: 4px; padding: 4px 6px 0; }
+.step { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; }
+.step:not(:last-child)::after { content: ""; position: absolute; top: 18px; left: calc(50% + 22px); right: calc(-50% + 22px); height: 3px; background: var(--ring-bg); border-radius: 2px; }
+.step.good:not(:last-child)::after { background: var(--good); }
+.dot { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 1.05rem; border: 2.5px solid; animation: pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) backwards; animation-delay: calc(0.3s + var(--i) * 0.12s); }
+.step.good .dot { background: var(--good-bg); color: var(--good); border-color: var(--good); }
+.step.bad .dot { background: var(--bad-bg); color: var(--red); border-color: var(--red); }
+.step .lab { font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; }
+.streak-note { margin: 0; color: var(--muted); }
+.tile { border-left: 7px solid var(--th); border-top-color: transparent; border-right-color: transparent; border-bottom-color: transparent; background: color-mix(in srgb, var(--th) 13%, var(--paper)); transition: transform 0.15s; }
+.tile.good, .tile.bad { border-color: transparent; border-left-color: var(--th); background: color-mix(in srgb, var(--th) 13%, var(--paper)); }
+.tile:hover { transform: translateY(-2px); }
+.tile .tq { color: var(--th); font-size: 0.85rem; }
+.tile .ts::before { content: ""; display: inline-block; width: 0.7em; height: 0.7em; border-radius: 50%; margin-right: 6px; background: currentColor; }
+.next { display: flex; gap: 12px; align-items: center; background: var(--note); border: 2px solid var(--note-rule); border-radius: 14px; padding: 12px 16px; font-weight: 600; }
+.next svg { flex: none; width: 28px; height: 28px; color: var(--note-rule); }
+.qrev { transition: box-shadow 0.15s; }
+.qrev.good { border-color: var(--good); }
+.qrev.bad { border-color: var(--red); }
+.qrev > summary { list-style: none; cursor: pointer; }
+.qrev > summary::-webkit-details-marker { display: none; }
+.qrev > summary::after { content: "\25BE"; font-size: 1.1rem; transition: transform 0.2s; }
+.qrev[open] > summary::after { transform: rotate(180deg); }
+.qrev > summary:focus-visible { outline: 3px solid var(--ell-line); outline-offset: -3px; }
+.panel, .overview, .res-head, .next { animation: rise 0.5s ease-out backwards; }
+.panel:nth-of-type(1) { animation-delay: 0.15s; }
+.confetti { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 80; }
+.confetti i { position: absolute; top: -16px; width: 9px; height: 15px; border-radius: 2px; animation: fall linear forwards; }
+@keyframes ringfill { from { stroke-dasharray: 0 400; } }
+@keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes rise { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes fall { to { transform: translate(var(--x), 105vh) rotate(var(--r)); } }
+@media (prefers-reduced-motion: reduce) {
+  .ring-fg, .star.on, .dot, .panel, .overview, .res-head, .next { animation: none; }
+  .tile { transition: none; }
+}
+@media (max-width: 480px) { .proto { width: 150px; } .step:not(:last-child)::after { left: calc(50% + 20px); right: calc(-50% + 20px); } }
+
+/* Class-wise rankings buttons on the first popup + ranking popup */
+.rank-entry { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; padding-top: 14px; border-top: 2px dashed color-mix(in srgb, var(--line) 35%, transparent); }
+.rank-entry .re-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--ink); }
+.rank-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.rank-open { font-family: var(--font-display); font-weight: 700; font-size: 1rem; line-height: 1.3; color: var(--ink); background: var(--paper); border: 3px solid var(--line); border-radius: 12px; padding: 11px 8px; cursor: pointer; }
+.rank-open:hover { background: color-mix(in srgb, var(--t1) 14%, var(--paper)); }
+.rank-open:focus-visible { outline: 3px solid var(--ell-line); outline-offset: 3px; }
+.rank-modal { position: relative; padding-top: 54px; width: min(520px, 100%); max-height: none; }
+.rank-modal h2 { padding-right: 8px; }
+#rank-overlay { z-index: 60; place-items: start center; grid-template-columns: minmax(0, 1fr); }
+#rank-overlay .rank-modal { margin-block: auto; margin-inline: auto; min-width: 0; box-sizing: border-box; }
+</style>
+
+<style>
+/* Results: answer review first, analytics after, compact header */
+.res-head { padding: 12px 16px !important; }
+.res-head h1 { font-size: clamp(1.15rem, 4vw, 1.6rem) !important; margin: 0 !important; }
+.res-head .res-eyebrow { font-size: 0.8rem; }
+.res-head .res-who { margin-top: 2px; }
+.res-head .stars { width: 210px; max-width: 100%; margin-top: 4px; }
+.res-head .proto { width: 120px; bottom: -26px; }
+.an-title { font-size: 1.3rem; margin: 10px 4px 0; padding-top: 14px; border-top: 3px dashed var(--line); }
+/* Ten questions: slightly tighter answer trail */
+.trail .dot { width: 30px; height: 30px; font-size: 0.95rem; }
+.step:not(:last-child)::after { top: 15px; left: calc(50% + 17px); right: calc(-50% + 17px); }
+@media (max-width: 480px) {
+  .trail .dot { width: 26px; height: 26px; font-size: 0.85rem; }
+  .step:not(:last-child)::after { top: 13px; left: calc(50% + 15px); right: calc(-50% + 15px); }
+  .step .lab { font-size: 0.7rem; letter-spacing: 0; }
+}
+
+/* Score ring card shown at the top of results (PC + mobile) */
+.top-analytics { margin: 14px 0 6px; animation: rise 0.5s ease-out backwards; }
+.top-analytics .an-title.an-top { margin: 0 4px 10px; padding-top: 0; border-top: 0; }
+.top-analytics .ring-card { width: 100%; max-width: 280px; margin: 0 auto; }
+.overview-stats { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 480px) { .top-analytics .ring-card { max-width: 100%; } }
+
+/* Class ranking panel */
+.rank-sub { margin: -4px 0 0; color: var(--muted); font-size: 0.9rem; }
+.rank-note, .rank-msg { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.rank-hero { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 12px; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--note-rule); background: color-mix(in srgb, var(--note-rule) 16%, var(--paper)); text-align: center; }
+.rank-hero b { font-family: var(--font-display); font-size: 2rem; line-height: 1; color: var(--ink); }
+.rank-hero span { color: var(--muted); font-size: 0.95rem; }
+
+.rank-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.rank-row { position: relative; flex: 0 0 auto; min-height: 48px; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 12px; border: 2px solid color-mix(in srgb, var(--line) 22%, transparent); border-radius: 12px; background: var(--paper); overflow: hidden; }
+.rank-row .fill { position: absolute; inset: 0 auto 0 0; width: var(--w, 0%); background: color-mix(in srgb, var(--t1) 24%, transparent); animation: rankgrow 0.8s ease-out backwards; }
+@keyframes rankgrow { from { width: 0; } }
+.rank-row > :not(.fill) { position: relative; }
+.rank-row .rk { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; line-height: 1.4; text-align: center; background: var(--badge-bg); color: var(--badge-fg); border-radius: 999px; padding: 3px 0; }
+.rank-row .rn { font-weight: 600; line-height: 1.5; padding: 2px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-row .rs { font-family: var(--font-display); font-weight: 700; line-height: 1.4; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rank-row .rs small { color: var(--muted); font-weight: 500; }
+.rank-row { color: var(--ink); }
+.rank-row.r1 .rk { background: #f5a623; color: #11151c; }
+.rank-row.r2 .rk { background: #c3cad6; color: #11151c; }
+.rank-row.r3 .rk { background: #d99a66; color: #11151c; }
+.rank-row.me { border-color: var(--note-rule); background: color-mix(in srgb, var(--note-rule) 14%, var(--paper)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--note-rule) 35%, transparent); }
+.rank-row.me .fill { background: color-mix(in srgb, var(--note-rule) 30%, transparent); }
+.rank-row.me .rn::after { content: "You"; display: inline-block; vertical-align: middle; font-size: 0.72rem; font-weight: 700; line-height: 1.5; color: var(--badge-fg); background: var(--badge-bg); padding: 0 9px; border-radius: 999px; margin-left: 10px; }
+@media (max-width: 480px) { .rank-row { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; padding: 8px 10px; } .rank-row.me .rn::after { margin-left: 8px; padding: 0 8px; } }
+@media (prefers-reduced-motion: reduce) { .rank-row .fill { animation: none; } }
+
+/* Loading bar for rankings */
+.rank-loading { display: flex; flex-direction: column; gap: 10px; }
+.rank-loading .bar { position: relative; height: 12px; border-radius: 999px; overflow: hidden; background: color-mix(in srgb, var(--line) 15%, var(--paper)); border: 2px solid color-mix(in srgb, var(--line) 30%, transparent); }
+.rank-loading .bar::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 35%; border-radius: 999px; background: linear-gradient(90deg, var(--t1, #3454b4), var(--t3, #2f9e6e)); animation: rankslide 1.2s ease-in-out infinite; }
+@keyframes rankslide { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+@media (prefers-reduced-motion: reduce) { .rank-loading .bar::before { animation: none; width: 100%; opacity: 0.5; } }
+
+/* Scroll back to the first unanswered question */
+.col.try { scroll-margin-top: 14px; }
+.col.try.missed { animation: missedflash 1.8s ease-out; }
+@keyframes missedflash { 0%, 60% { box-shadow: 0 0 0 4px var(--red); } 100% { box-shadow: 0 0 0 4px transparent; } }
+@media (prefers-reduced-motion: reduce) { .col.try.missed { animation: none; box-shadow: 0 0 0 4px var(--red); } }
+
+/* First popup: compact so it fits one phone screen, never scrolls sideways */
+.overlay, .modal { box-sizing: border-box; max-width: 100%; }
+.overlay { overflow-x: hidden; }
+#details .err:empty { display: none; }
+#details .err { min-height: 0; }
+@media (max-width: 560px) {
+  #details { padding: 16px 16px 16px; gap: 9px; }
+  #details h2 { font-size: 1.3rem; }
+  #details > p:not(.err) { font-size: 0.95rem; margin-top: -4px; }
+  #details .field { gap: 3px; }
+  #details .field label { font-size: 0.78rem; }
+  #details .field input { font-size: 1.05rem; padding: 9px 12px; border-radius: 10px; }
+  #details .phone-wrap { border-radius: 10px; }
+  #details .phone-wrap .cc { font-size: 1.05rem; padding: 9px 12px; }
+  #details .actions { margin-top: 2px; }
+  #details .start-btn { font-size: 1.1rem; padding: 12px 16px; }
+  #details .err { font-size: 0.9rem; }
+  #details .rank-entry { margin-top: 2px; padding-top: 10px; gap: 6px; }
+  #details .rank-entry .re-title { font-size: 0.85rem; }
+  #details .rank-btns { gap: 8px; }
+  #details .rank-open { font-size: 0.95rem; padding: 9px 6px; border-width: 2px; border-radius: 10px; white-space: nowrap; }
+  #details .rank-open br { display: none; }
+  .overlay { padding-top: 10px; padding-bottom: 10px; }
+}
+@media (max-width: 560px) and (max-height: 640px) {
+  #details { gap: 6px; padding: 12px 14px; }
+  #details .field input, #details .phone-wrap .cc { padding: 7px 10px; }
+  #details .start-btn { padding: 10px 14px; }
+}
+</style>
+<style>
+.exam-imp { margin: 0; text-align: center; color: var(--red); font-family: var(--font-display); font-weight: 700; font-size: clamp(1.3rem, 4.5vw, 2rem); letter-spacing: 0.08em; text-transform: uppercase; border: 3px solid var(--red); border-radius: 14px; padding: 8px 12px; background: var(--paper); }
+</style>
+<main class="sheet" id="homework">
+
+  <p class="exam-imp">Exam Important</p>
+
+  <header class="masthead">
+    <h1>HOMEWORK ASSIGNMENT – 8 November 2026</h1>
+    <div class="sub">Geometry (Class 7 – 8)</div>
+    <div class="meta">Session: 2026 – 27</div>
+    <div class="meta"><b>TOTAL MARKS: 1</b></div>
+    <div class="who" id="who" hidden>
+      <span id="who-text"></span>
+      <button type="button" class="link-btn" id="who-edit">Edit</button>
+    </div>
+  </header>
+
+  <section class="table-wrap" aria-label="Marking criteria">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Criteria</th><th>Marks</th></tr></thead>
+        <tbody>
+          <tr><td>Self-attempted all questions</td><td>1 mark (even if all answers are wrong)</td></tr>
+          <tr><td>No attempt / Solved by tuition teacher / Copied from friends / Absent on submission day</td><td>0 mark</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- ===== Question 1 ===== -->
+    <article class="card" aria-labelledby="q1h">
+      <div class="topic"><b>Q1</b> · Natural, whole numbers and integers</div>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q1h">1</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> Which of the following is an integer but not a whole number?</p>
+          <div class="note"><b>Natural numbers:</b> 1, 2, 3, … &nbsp;·&nbsp; <b>Whole numbers:</b> 0, 1, 2, 3, … &nbsp;·&nbsp; <b>Integers:</b> …, −2, −1, 0, 1, 2, …</div>
+          <svg class="diagram" viewBox="0 0 300 160" role="img" aria-label="Nested sets: Natural inside Whole inside Integers inside Rational inside Real">
+                      <ellipse class="ell" cx="150" cy="68" rx="140" ry="62"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="112" ry="50"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="84" ry="38"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="56" ry="26"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="30" ry="15"/>
+                      <text class="sh" x="17" y="73" text-anchor="middle">R</text>
+                      <text class="sh" x="45" y="73" text-anchor="middle">Q</text>
+                      <text class="sh" x="73" y="73" text-anchor="middle">Z</text>
+                      <text class="sh" x="101" y="73" text-anchor="middle">W</text>
+                      <text class="sh" x="150" y="73" text-anchor="middle">N</text>
+                      <text class="cap" x="150" y="144" text-anchor="middle">R Real · Q Rational · Z Integers</text>
+                      <text class="cap" x="150" y="156" text-anchor="middle">W Whole · N Natural</text>
+                    </svg>
+          <ul class="opts">
+            <li><span class="k">A)</span> 0</li>
+            <li><span class="k">B)</span> 7</li>
+            <li><span class="k">C)</span> −4</li>
+            <li><span class="k">D)</span> 3/5</li>
+            <li><span class="k">E)</span> √2</li>
+            <li><span class="k">F)</span> 12</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">C (−4)</span></p>
+          <p class="explain"><b>Explanation:</b> Whole numbers start from 0 and never go negative. −4 is an integer, but it is negative, so it is not a whole number. 0, 7 and 12 are whole numbers, 3/5 is a fraction and √2 is irrational.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> Which of the following is a whole number but not a natural number?</p>
+          <div class="note"><b>Natural numbers:</b> 1, 2, 3, … &nbsp;·&nbsp; <b>Whole numbers:</b> 0, 1, 2, 3, …</div>
+          <svg class="diagram" viewBox="0 0 300 160" role="img" aria-label="Nested sets: Natural inside Whole inside Integers inside Rational inside Real">
+                      <ellipse class="ell" cx="150" cy="68" rx="140" ry="62"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="112" ry="50"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="84" ry="38"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="56" ry="26"/>
+                      <ellipse class="ell" cx="150" cy="68" rx="30" ry="15"/>
+                      <text class="sh" x="17" y="73" text-anchor="middle">R</text>
+                      <text class="sh" x="45" y="73" text-anchor="middle">Q</text>
+                      <text class="sh" x="73" y="73" text-anchor="middle">Z</text>
+                      <text class="sh" x="101" y="73" text-anchor="middle">W</text>
+                      <text class="sh" x="150" y="73" text-anchor="middle">N</text>
+                      <text class="cap" x="150" y="144" text-anchor="middle">R Real · Q Rational · Z Integers</text>
+                      <text class="cap" x="150" y="156" text-anchor="middle">W Whole · N Natural</text>
+                    </svg>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 1 options</legend>
+            <label><input type="radio" name="t1"> A) 1</label>
+            <label><input type="radio" name="t1"> B) −2</label>
+            <label><input type="radio" name="t1"> C) 5/2</label>
+            <label><input type="radio" name="t1"> D) 9</label>
+            <label><input type="radio" name="t1"> E) 0</label>
+            <label><input type="radio" name="t1"> F) −10</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> Natural numbers are 1, 2, 3, … and whole numbers are natural numbers together with 0. Every natural number is a whole number, every whole number is an integer, every integer is rational, and every rational number is real.</div>
+    </article>
+
+    <!-- ===== Question 2 ===== -->
+    <article class="card" aria-labelledby="q2h">
+      <div class="topic"><b>Q2</b> · Classifying numbers</div>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q2h">2</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> From the numbers −4, 2/5, √7, 0, π, 6i, which are the irrational numbers?</p>
+          <div class="note"><b>Irrational</b> numbers cannot be written as p/q. <b>Imaginary</b> numbers such as 6i are not real numbers at all.</div>
+          <ul class="opts">
+            <li><span class="k">A)</span> √7 and π</li>
+            <li><span class="k">B)</span> 2/5 and √7</li>
+            <li><span class="k">C)</span> −4 and 0</li>
+            <li><span class="k">D)</span> π and 6i</li>
+            <li><span class="k">E)</span> √7 and 6i</li>
+            <li><span class="k">F)</span> 2/5 and π</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">A (√7 and π)</span></p>
+          <p class="explain"><b>Explanation:</b> Irrational numbers cannot be written as a fraction p/q. √7 and π are irrational. −4 = −4/1, 2/5 and 0 = 0/1 are rational, and 6i is imaginary.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> From the numbers −6, 5/8, √3, 0, 4.5, 9i, which are the rational numbers?</p>
+          <div class="note"><b>Rational</b> numbers can be written as p/q with q ≠ 0, for example 0.5 = 1/2.</div>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 2 options</legend>
+            <label><input type="radio" name="t2"> A) −6, √3 and 0</label>
+            <label><input type="radio" name="t2"> B) −6, 5/8, 0 and 4.5</label>
+            <label><input type="radio" name="t2"> C) 5/8, √3 and 9i</label>
+            <label><input type="radio" name="t2"> D) −6, 5/8, 0 and 9i</label>
+            <label><input type="radio" name="t2"> E) √3 and 9i</label>
+            <label><input type="radio" name="t2"> F) −6, 5/8, √3 and 4.5</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> Rational numbers can be written as p/q. Irrational numbers (such as √3 and π) cannot. Imaginary numbers (such as 5i) are not real. Rational and irrational numbers together make up the real numbers.</div>
+    </article>
+
+    <!-- ===== Question 3 ===== -->
+    <article class="card" aria-labelledby="q3h">
+      <div class="topic"><b>Q3</b> · Division by zero</div>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q3h">3</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> Which of these expressions is undefined?</p>
+          <ul class="opts">
+            <li><span class="k">A)</span> 0 ÷ 9</li>
+            <li><span class="k">B)</span> 9 ÷ 1</li>
+            <li><span class="k">C)</span> 9 ÷ 0</li>
+            <li><span class="k">D)</span> 0 × 9</li>
+            <li><span class="k">E)</span> 9 − 9</li>
+            <li><span class="k">F)</span> 0 + 9</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">C (9 ÷ 0)</span></p>
+          <p class="explain"><b>Explanation:</b> If 9 ÷ 0 = k, then k × 0 would have to equal 9. But any number multiplied by 0 gives 0, so no such number k exists. Division by zero is undefined.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> Which of the following statements is correct?</p>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 3 options</legend>
+            <label><input type="radio" name="t3"> A) 5 ÷ 0 = 0</label>
+            <label><input type="radio" name="t3"> B) 5 ÷ 0 = 5</label>
+            <label><input type="radio" name="t3"> C) 5 ÷ 0 = 1</label>
+            <label><input type="radio" name="t3"> D) 0 ÷ 5 = 0</label>
+            <label><input type="radio" name="t3"> E) 0 ÷ 5 is undefined</label>
+            <label><input type="radio" name="t3"> F) 0 ÷ 5 = 5</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> Dividing by zero is undefined, because no number multiplied by 0 can give a non-zero answer. But dividing zero by a non-zero number is fine: 0 ÷ 5 = 0.</div>
+    </article>
+
+    <!-- ===== Question 4 ===== -->
+    <article class="card" aria-labelledby="q4h">
+      <div class="topic"><b>Q4</b> · Parallel and perpendicular line segments</div>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q4h">4</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> ABCD is a rectangle. Its diagonals AC and BD are drawn as dashed lines. Which pair of line segments is parallel?</p>
+          <div class="note"><b>Parallel</b> lines never meet. <b>Perpendicular</b> lines meet at 90°. Every angle of a rectangle is 90°.</div>
+          <svg class="diagram" viewBox="0 0 280 190" role="img" aria-label="Rectangle ABCD with dashed diagonals AC and BD">
+            <path class="ln" d="M40 40 L240 40 L240 150 L40 150 Z"/>
+            <line class="dash" x1="40" y1="40" x2="240" y2="150"/>
+            <line class="dash" x1="240" y1="40" x2="40" y2="150"/>
+            <text class="lbl" x="22" y="34">A</text>
+            <text class="lbl" x="248" y="34">B</text>
+            <text class="lbl" x="248" y="166">C</text>
+            <text class="lbl" x="22" y="166">D</text>
+          </svg>
+          <ul class="opts">
+            <li><span class="k">A)</span> AB and BC</li>
+            <li><span class="k">B)</span> AC and BD</li>
+            <li><span class="k">C)</span> AB and CD</li>
+            <li><span class="k">D)</span> AD and CD</li>
+            <li><span class="k">E)</span> AB and AC</li>
+            <li><span class="k">F)</span> BC and CD</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">C (AB and CD)</span></p>
+          <p class="explain"><b>Explanation:</b> Opposite sides of a rectangle are parallel, so AB ∥ CD (and AD ∥ BC). Sides that meet at a corner, such as AB and BC, are perpendicular. The diagonals AC and BD cross each other, so they are not parallel.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> PQRS is a rectangle. Its diagonals PR and QS are drawn as dashed lines. Which pair of line segments is perpendicular?</p>
+          <div class="note"><b>Parallel</b> lines never meet. <b>Perpendicular</b> lines meet at 90°. Every angle of a rectangle is 90°.</div>
+          <svg class="diagram" viewBox="0 0 280 190" role="img" aria-label="Rectangle PQRS with dashed diagonals PR and QS">
+            <path class="ln" d="M40 40 L240 40 L240 150 L40 150 Z"/>
+            <line class="dash" x1="40" y1="40" x2="240" y2="150"/>
+            <line class="dash" x1="240" y1="40" x2="40" y2="150"/>
+            <text class="lbl" x="22" y="34">P</text>
+            <text class="lbl" x="248" y="34">Q</text>
+            <text class="lbl" x="248" y="166">R</text>
+            <text class="lbl" x="22" y="166">S</text>
+          </svg>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 4 options</legend>
+            <label><input type="radio" name="t4"> A) PQ and RS</label>
+            <label><input type="radio" name="t4"> B) PS and QR</label>
+            <label><input type="radio" name="t4"> C) PR and QS</label>
+            <label><input type="radio" name="t4"> D) PQ and PR</label>
+            <label><input type="radio" name="t4"> E) PR and PS</label>
+            <label><input type="radio" name="t4"> F) PQ and QR</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> In a rectangle, opposite sides are parallel and sides meeting at a corner are perpendicular. A line segment has two endpoints, and each side of the rectangle is a line segment.</div>
+    </article>
+
+    <!-- ===== Question 5 ===== -->
+    <article class="card" aria-labelledby="q5h">
+      <div class="topic"><b>Q5</b> · Complementary and supplementary angles</div>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q5h">5</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> An angle measures 38°. Find its complement and its supplement.</p>
+          <div class="note"><b>Complementary</b> angles add up to 90°. <b>Supplementary</b> angles add up to 180°. A linear pair is supplementary.</div>
+          <ul class="opts">
+            <li><span class="k">A)</span> 62° and 142°</li>
+            <li><span class="k">B)</span> 52° and 142°</li>
+            <li><span class="k">C)</span> 142° and 52°</li>
+            <li><span class="k">D)</span> 52° and 322°</li>
+            <li><span class="k">E)</span> 38° and 142°</li>
+            <li><span class="k">F)</span> 52° and 152°</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">B (52° and 142°)</span></p>
+          <p class="explain"><b>Explanation:</b> Complement = 90° − 38° = 52°. Supplement = 180° − 38° = 142°.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> An angle measures 57°. Find its complement and its supplement.</p>
+          <div class="note"><b>Complementary</b> angles add up to 90°. <b>Supplementary</b> angles add up to 180°.</div>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 5 options</legend>
+            <label><input type="radio" name="t5"> A) 33° and 123°</label>
+            <label><input type="radio" name="t5"> B) 123° and 33°</label>
+            <label><input type="radio" name="t5"> C) 43° and 123°</label>
+            <label><input type="radio" name="t5"> D) 33° and 303°</label>
+            <label><input type="radio" name="t5"> E) 57° and 123°</label>
+            <label><input type="radio" name="t5"> F) 33° and 133°</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> Complementary angles add up to 90°, and supplementary angles add up to 180°. A linear pair (two adjacent angles on a straight line) is always supplementary.</div>
+    </article>
+
+    <!-- ===== Question 6 ===== -->
+    <article class="card" aria-labelledby="q6h">
+      <div class="topic"><b>Q6</b> · Vertically opposite angles</div>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q6h">6</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> Lines AB and CD intersect at O and ∠AOC = 55°. Find ∠BOD, ∠AOD and ∠BOC.</p>
+          <svg class="diagram" viewBox="0 0 320 210" role="img" aria-label="Lines AB and CD crossing at O with angle AOC marked 55 degrees">
+            <line class="ln" x1="279.3" y1="92.5" x2="40.7" y2="117.5"/>
+            <line class="ln" x1="97.7" y1="33.3" x2="222.3" y2="176.7"/>
+            <text class="lbl" x="27.7" y="124.9" text-anchor="middle">A</text>
+            <text class="lbl" x="292.3" y="97.1" text-anchor="middle">B</text>
+            <text class="lbl" x="89.1" y="29.5" text-anchor="middle">C</text>
+            <text class="lbl" x="230.9" y="192.5" text-anchor="middle">D</text>
+            <path class="rd" d="M142.9 85.4 A26 26 0 0 0 134.1 107.7"/>
+            <text class="rlbl" x="117.2" y="93.1" text-anchor="middle">55°</text>
+            <text class="lbl" x="167" y="124">O</text>
+          </svg>
+          <ul class="opts">
+            <li><span class="k">A)</span> ∠BOD = 55°, ∠AOD = 125°, ∠BOC = 125°</li>
+            <li><span class="k">B)</span> ∠BOD = 125°, ∠AOD = 55°, ∠BOC = 55°</li>
+            <li><span class="k">C)</span> ∠BOD = 55°, ∠AOD = 55°, ∠BOC = 125°</li>
+            <li><span class="k">D)</span> ∠BOD = 125°, ∠AOD = 125°, ∠BOC = 55°</li>
+            <li><span class="k">E)</span> ∠BOD = 35°, ∠AOD = 145°, ∠BOC = 145°</li>
+            <li><span class="k">F)</span> ∠BOD = 55°, ∠AOD = 125°, ∠BOC = 55°</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">A (∠BOD = 55°, ∠AOD = 125°, ∠BOC = 125°)</span></p>
+          <p class="explain"><b>Explanation:</b> ∠BOD is vertically opposite ∠AOC, so it is 55°. ∠AOD and ∠AOC form a linear pair, so ∠AOD = 180° − 55° = 125°. ∠BOC is vertically opposite ∠AOD, so it is also 125°.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> Lines PQ and RS intersect at O and ∠POS = 125°. Find ∠QOR, ∠POR and ∠QOS.</p>
+          <svg class="diagram" viewBox="0 0 320 210" role="img" aria-label="Lines PQ and RS crossing at O with angle POS marked 125 degrees">
+            <line class="ln" x1="279.3" y1="117.5" x2="40.7" y2="92.5"/>
+            <line class="ln" x1="87.8" y1="188" x2="232.2" y2="22"/>
+            <text class="lbl" x="27.7" y="97.1" text-anchor="middle">P</text>
+            <text class="lbl" x="292.3" y="124.9" text-anchor="middle">Q</text>
+            <text class="lbl" x="240.7" y="18.2" text-anchor="middle">S</text>
+            <text class="lbl" x="79.3" y="203.8" text-anchor="middle">R</text>
+            <path class="rd" d="M177.1 85.4 A26 26 0 0 0 134.1 102.3"/>
+            <text class="rlbl" x="140.9" y="61.6" text-anchor="middle">125°</text>
+            <text class="lbl" x="167" y="124">O</text>
+          </svg>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 6 options</legend>
+            <label><input type="radio" name="t6"> A) ∠QOR = 55°, ∠POR = 125°, ∠QOS = 125°</label>
+            <label><input type="radio" name="t6"> B) ∠QOR = 125°, ∠POR = 55°, ∠QOS = 125°</label>
+            <label><input type="radio" name="t6"> C) ∠QOR = 125°, ∠POR = 55°, ∠QOS = 55°</label>
+            <label><input type="radio" name="t6"> D) ∠QOR = 55°, ∠POR = 55°, ∠QOS = 125°</label>
+            <label><input type="radio" name="t6"> E) ∠QOR = 65°, ∠POR = 115°, ∠QOS = 115°</label>
+            <label><input type="radio" name="t6"> F) ∠QOR = 125°, ∠POR = 125°, ∠QOS = 55°</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> Two intersecting lines form two pairs of equal vertically opposite angles, and every two adjacent angles add up to 180° (a linear pair).</div>
+    </article>
+
+    <!-- ===== Question 7 (challenge) ===== -->
+    <article class="card wide" aria-labelledby="q7h">
+      <div class="topic"><b>Q7</b> · Intersecting lines and equations</div>
+      <span class="badge-challenge">★ Challenge</span>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q7h">7</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> Lines AB and CD intersect at O. ∠AOC = 3x° and ∠AOD = 6x°. Find the value of x and ∠BOC.</p>
+          <div class="note"><b>Tip:</b> ∠AOC and ∠AOD are adjacent angles on the straight line CD, so they form a linear pair.</div>
+          <svg class="diagram" viewBox="0 0 320 210" role="img" aria-label="Lines AB and CD crossing at O with angle AOC marked 3x and angle AOD marked 6x">
+            <line class="ln" x1="279.3" y1="92.5" x2="40.7" y2="117.5"/>
+            <line class="ln" x1="104.2" y1="28.1" x2="215.8" y2="181.9"/>
+            <text class="lbl" x="27.7" y="124.9" text-anchor="middle">A</text>
+            <text class="lbl" x="292.3" y="97.1" text-anchor="middle">B</text>
+            <text class="lbl" x="96.5" y="23.6" text-anchor="middle">C</text>
+            <text class="lbl" x="223.5" y="198.4" text-anchor="middle">D</text>
+            <path class="rd" d="M144.7 84 A26 26 0 0 0 134.1 107.7"/>
+            <text class="rlbl" x="118" y="91.3" text-anchor="middle">3x°</text>
+            <path class="rd" d="M134.1 107.7 A26 26 0 0 0 175.3 126"/>
+            <text class="rlbl" x="141.3" y="152" text-anchor="middle">6x°</text>
+            <text class="lbl" x="167" y="124">O</text>
+          </svg>
+          <ul class="opts">
+            <li><span class="k">A)</span> x = 20, ∠BOC = 60°</li>
+            <li><span class="k">B)</span> x = 20, ∠BOC = 120°</li>
+            <li><span class="k">C)</span> x = 40, ∠BOC = 240°</li>
+            <li><span class="k">D)</span> x = 10, ∠BOC = 60°</li>
+            <li><span class="k">E)</span> x = 20, ∠BOC = 180°</li>
+            <li><span class="k">F)</span> x = 15, ∠BOC = 90°</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">B (x = 20, ∠BOC = 120°)</span></p>
+          <p class="explain"><b>Explanation:</b> ∠AOC and ∠AOD form a linear pair: 3x + 6x = 180°, so 9x = 180° and x = 20. Then ∠AOD = 6 × 20° = 120°. ∠BOC is vertically opposite ∠AOD, so ∠BOC = 120°.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> Lines PQ and RS intersect at O. ∠POR = 7x° and ∠POS = 8x°. Find the value of x and ∠QOS.</p>
+          <div class="note"><b>Tip:</b> ∠POR and ∠POS are adjacent angles on the straight line RS, so they form a linear pair.</div>
+          <svg class="diagram" viewBox="0 0 320 210" role="img" aria-label="Lines PQ and RS crossing at O with angle POR marked 7x and angle POS marked 8x">
+            <line class="ln" x1="279.3" y1="92.5" x2="40.7" y2="117.5"/>
+            <line class="ln" x1="143.4" y1="26.7" x2="176.6" y2="183.3"/>
+            <text class="lbl" x="27.7" y="124.9" text-anchor="middle">P</text>
+            <text class="lbl" x="292.3" y="97.1" text-anchor="middle">Q</text>
+            <text class="lbl" x="140.7" y="20" text-anchor="middle">R</text>
+            <text class="lbl" x="179.3" y="202" text-anchor="middle">S</text>
+            <path class="rd" d="M154.6 79.6 A26 26 0 0 0 134.1 107.7"/>
+            <text class="rlbl" x="122.8" y="83" text-anchor="middle">7x°</text>
+            <path class="rd" d="M134.1 107.7 A26 26 0 0 0 165.4 130.4"/>
+            <text class="rlbl" x="133" y="147.2" text-anchor="middle">8x°</text>
+            <text class="lbl" x="167" y="124">O</text>
+          </svg>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 7 options</legend>
+            <label><input type="radio" name="t7"> A) x = 12, ∠QOS = 96°</label>
+            <label><input type="radio" name="t7"> B) x = 24, ∠QOS = 168°</label>
+            <label><input type="radio" name="t7"> C) x = 6, ∠QOS = 42°</label>
+            <label><input type="radio" name="t7"> D) x = 12, ∠QOS = 180°</label>
+            <label><input type="radio" name="t7"> E) x = 12, ∠QOS = 84°</label>
+            <label><input type="radio" name="t7"> F) x = 24, ∠QOS = 192°</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> Adjacent angles on a straight line add up to 180°, so write an equation in x and solve it. Then use vertically opposite angles (which are equal) to find the remaining angles.</div>
+    </article>
+
+    <!-- ===== Question 8 ===== -->
+    <article class="card wide" aria-labelledby="q8h">
+      <div class="topic"><b>Q8</b> · Parallel lines and a transversal</div>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q8h">8</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> In the figure, l ∥ m and t is a transversal. If ∠1 = 110°, find ∠5, ∠3 and ∠8, and name the angle pair in each case.</p>
+          <svg class="diagram" viewBox="0 0 300 190" role="img" aria-label="Parallel lines l and m cut by transversal t, with angle 1 marked 110 degrees and the other angles numbered">
+            <line class="ln" x1="30" y1="60" x2="266" y2="60"/>
+            <line class="ln" x1="30" y1="130" x2="266" y2="130"/>
+            <path class="ln" d="M251 54 L259 60 L251 66 M259 54 L267 60 L259 66"/>
+            <path class="ln" d="M251 124 L259 130 L251 136 M259 124 L267 130 L259 136"/>
+            <line class="ln" x1="184" y1="15" x2="81" y2="175"/>
+            <text class="lbl" x="14" y="66">l</text>
+            <text class="lbl" x="12" y="136">m</text>
+            <text class="lbl" x="190" y="18">t</text>
+            <path class="rd" d="M140 60 A15 15 0 0 1 163.11 47.38"/>
+            <text class="rlbl" x="140.7" y="37.7" text-anchor="middle">110°</text>
+            <text class="nm" x="179.6" y="50.6" text-anchor="middle">2</text>
+            <text class="nm" x="130.4" y="77.4" text-anchor="middle">3</text>
+            <text class="nm" x="168.4" y="88.6" text-anchor="middle">4</text>
+            <text class="nm" x="96.6" y="109.4" text-anchor="middle">5</text>
+            <text class="nm" x="134.6" y="120.6" text-anchor="middle">6</text>
+            <text class="nm" x="85.4" y="147.4" text-anchor="middle">7</text>
+            <text class="nm" x="123.4" y="158.6" text-anchor="middle">8</text>
+          </svg>
+          <ul class="opts">
+            <li><span class="k">A)</span> ∠5 = 110° (corresponding), ∠3 = 70° (linear pair), ∠8 = 110° (alternate exterior)</li>
+            <li><span class="k">B)</span> ∠5 = 70° (corresponding), ∠3 = 110° (linear pair), ∠8 = 70° (alternate exterior)</li>
+            <li><span class="k">C)</span> ∠5 = 110° (alternate interior), ∠3 = 70° (linear pair), ∠8 = 110° (corresponding)</li>
+            <li><span class="k">D)</span> ∠5 = 110° (corresponding), ∠3 = 110° (vertically opposite), ∠8 = 70° (alternate exterior)</li>
+            <li><span class="k">E)</span> ∠5 = 70° (co-interior), ∠3 = 70° (linear pair), ∠8 = 110° (alternate exterior)</li>
+            <li><span class="k">F)</span> ∠5 = 110° (corresponding), ∠3 = 70° (linear pair), ∠8 = 70° (alternate interior)</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">A (∠5 = 110°, ∠3 = 70°, ∠8 = 110°)</span></p>
+          <p class="explain"><b>Explanation:</b> ∠5 = ∠1 = 110° (corresponding angles). ∠3 = 180° − 110° = 70° (linear pair with ∠1). ∠8 = ∠1 = 110° (alternate exterior angles).</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> In the figure, l ∥ m and t is a transversal. If ∠2 = 65°, find ∠4, ∠6 and ∠7, and name the angle pair in each case.</p>
+          <svg class="diagram" viewBox="0 0 300 190" role="img" aria-label="Parallel lines l and m cut by transversal t, with angle 2 marked 65 degrees and the other angles numbered">
+            <line class="ln" x1="30" y1="60" x2="266" y2="60"/>
+            <line class="ln" x1="30" y1="130" x2="266" y2="130"/>
+            <path class="ln" d="M251 54 L259 60 L251 66 M259 54 L267 60 L259 66"/>
+            <path class="ln" d="M251 124 L259 130 L251 136 M259 124 L267 130 L259 136"/>
+            <line class="ln" x1="184" y1="15" x2="81" y2="175"/>
+            <text class="lbl" x="14" y="66">l</text>
+            <text class="lbl" x="12" y="136">m</text>
+            <text class="lbl" x="190" y="18">t</text>
+            <path class="rd" d="M163.11 47.38 A15 15 0 0 1 170 60"/>
+            <text class="nm" x="141.6" y="39.4" text-anchor="middle">1</text>
+            <text class="rlbl" x="189" y="46" text-anchor="middle">65°</text>
+            <text class="nm" x="130.4" y="77.4" text-anchor="middle">3</text>
+            <text class="nm" x="168.4" y="88.6" text-anchor="middle">4</text>
+            <text class="nm" x="96.6" y="109.4" text-anchor="middle">5</text>
+            <text class="nm" x="134.6" y="120.6" text-anchor="middle">6</text>
+            <text class="nm" x="85.4" y="147.4" text-anchor="middle">7</text>
+            <text class="nm" x="123.4" y="158.6" text-anchor="middle">8</text>
+          </svg>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 8 options</legend>
+            <label><input type="radio" name="t8"> A) ∠4 = 65° (linear pair), ∠6 = 115° (corresponding), ∠7 = 115° (alternate exterior)</label>
+            <label><input type="radio" name="t8"> B) ∠4 = 115° (linear pair), ∠6 = 65° (corresponding), ∠7 = 65° (alternate exterior)</label>
+            <label><input type="radio" name="t8"> C) ∠4 = 115° (vertically opposite), ∠6 = 65° (corresponding), ∠7 = 115° (alternate exterior)</label>
+            <label><input type="radio" name="t8"> D) ∠4 = 115° (linear pair), ∠6 = 65° (alternate interior), ∠7 = 65° (alternate exterior)</label>
+            <label><input type="radio" name="t8"> E) ∠4 = 65° (vertically opposite), ∠6 = 65° (corresponding), ∠7 = 115° (co-interior)</label>
+            <label><input type="radio" name="t8"> F) ∠4 = 115° (linear pair), ∠6 = 115° (corresponding), ∠7 = 65° (alternate exterior)</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> Use three facts: vertically opposite angles are equal, parallel lines make equal corresponding, alternate interior and alternate exterior angles, and a linear pair adds up to 180°.</div>
+    </article>
+
+    <!-- ===== Question 9 (challenge) ===== -->
+    <article class="card wide" aria-labelledby="q9h">
+      <div class="topic"><b>Q9</b> · Angle at a bend</div>
+      <span class="badge-challenge">★ Challenge</span>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q9h">9</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> In the figure, AB ∥ CD, ∠ABE = 140° and ∠CDE = 125°. Find ∠BED.</p>
+          <div class="note"><b>Tip:</b> Draw a line through E parallel to AB and CD. It splits ∠BED into two parts.</div>
+          <svg class="diagram" style="max-width:420px" viewBox="0 0 300 180" role="img" aria-label="Parallel lines AB and CD with a bend B to E to D; angle ABE is 140 degrees, angle CDE is 125 degrees, and angle BED is marked with a question mark. A dashed line through E is parallel to both lines.">
+            <line class="ln" x1="40" y1="40" x2="266" y2="40"/>
+            <line class="ln" x1="40" y1="140" x2="266" y2="140"/>
+            <path class="ln" d="M251 34 L259 40 L251 46 M259 34 L267 40 L259 46"/>
+            <path class="ln" d="M251 134 L259 140 L251 146 M259 134 L267 140 L259 146"/>
+            <line class="rd" style="stroke-dasharray:5 4" x1="60" y1="80" x2="266" y2="80"/>
+            <polyline class="ln" points="100,40 147.7,80 105.7,140"/>
+            <circle cx="100" cy="40" r="2.5" fill="currentColor"/>
+            <circle cx="147.7" cy="80" r="2.5" fill="currentColor"/>
+            <circle cx="105.7" cy="140" r="2.5" fill="currentColor"/>
+            <path class="rd" d="M84 40 A16 16 0 0 0 112.3 50.3"/>
+            <path class="rd" d="M114.8 126.9 A16 16 0 0 0 89.7 140"/>
+            <path class="rd" d="M135.4 69.7 A16 16 0 0 0 138.5 93.1"/>
+            <text class="rlbl" x="68" y="64" text-anchor="middle">140°</text>
+            <text class="rlbl" x="88.1" y="111.3" text-anchor="middle">125°</text>
+            <text class="rlbl" style="font-size:18px" x="123.9" y="89.1" text-anchor="middle">?</text>
+            <text class="lbl" x="22" y="45">A</text>
+            <text class="lbl" x="94" y="30">B</text>
+            <text class="lbl" x="22" y="145">C</text>
+            <text class="lbl" x="99.7" y="162">D</text>
+            <text class="lbl" x="156.7" y="85">E</text>
+          </svg>
+          <ul class="opts">
+            <li><span class="k">A)</span> 40°</li>
+            <li><span class="k">B)</span> 95°</li>
+            <li><span class="k">C)</span> 55°</li>
+            <li><span class="k">D)</span> 85°</li>
+            <li><span class="k">E)</span> 125°</li>
+            <li><span class="k">F)</span> 140°</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">B (∠BED = 95°)</span></p>
+          <p class="explain"><b>Explanation:</b> Draw a line through E parallel to AB and CD. Co-interior angles add up to 180°, giving 180° − 140° = 40° and 180° − 125° = 55°. So ∠BED = 40° + 55° = 95°.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> In the figure, PQ ∥ RS, ∠PQE = 150° and ∠RSE = 130°. Find ∠QES.</p>
+          <div class="note"><b>Tip:</b> Draw a line through E parallel to PQ and RS. It splits ∠QES into two parts.</div>
+          <svg class="diagram" style="max-width:420px" viewBox="0 0 300 180" role="img" aria-label="Parallel lines PQ and RS with a bend Q to E to S; angle PQE is 150 degrees, angle RSE is 130 degrees, and angle QES is marked with a question mark.">
+            <line class="ln" x1="40" y1="40" x2="266" y2="40"/>
+            <line class="ln" x1="40" y1="140" x2="266" y2="140"/>
+            <path class="ln" d="M251 34 L259 40 L251 46 M259 34 L267 40 L259 46"/>
+            <path class="ln" d="M251 134 L259 140 L251 146 M259 134 L267 140 L259 146"/>
+            <polyline class="ln" points="100,40 169.3,80 118.9,140"/>
+            <circle cx="100" cy="40" r="2.5" fill="currentColor"/>
+            <circle cx="169.3" cy="80" r="2.5" fill="currentColor"/>
+            <circle cx="118.9" cy="140" r="2.5" fill="currentColor"/>
+            <path class="rd" d="M84 40 A16 16 0 0 0 113.9 48"/>
+            <path class="rd" d="M129.2 127.7 A16 16 0 0 0 102.9 140"/>
+            <path class="rd" d="M155.4 72 A16 16 0 0 0 159 92.3"/>
+            <text class="rlbl" x="68" y="64" text-anchor="middle">150°</text>
+            <text class="rlbl" x="102.9" y="110.6" text-anchor="middle">130°</text>
+            <text class="rlbl" style="font-size:18px" x="145.6" y="90.2" text-anchor="middle">?</text>
+            <text class="lbl" x="22" y="45">P</text>
+            <text class="lbl" x="94" y="30">Q</text>
+            <text class="lbl" x="22" y="145">R</text>
+            <text class="lbl" x="112.9" y="162">S</text>
+            <text class="lbl" x="178.3" y="85">E</text>
+          </svg>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 9 options</legend>
+            <label><input type="radio" name="t9"> A) 30°</label>
+            <label><input type="radio" name="t9"> B) 50°</label>
+            <label><input type="radio" name="t9"> C) 100°</label>
+            <label><input type="radio" name="t9"> D) 80°</label>
+            <label><input type="radio" name="t9"> E) 130°</label>
+            <label><input type="radio" name="t9"> F) 150°</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> To find an angle at a bend between two parallel lines, draw a line through the bend point parallel to both. Each part is found with co-interior angles (sum 180°) or alternate angles (equal), and the angle at the bend is the sum of the two parts.</div>
+    </article>
+
+    <!-- ===== Question 10 (challenge) ===== -->
+    <article class="card wide" aria-labelledby="q10h">
+      <div class="topic"><b>Q10</b> · Several parallel lines</div>
+      <span class="badge-challenge">★ Challenge</span>
+      <div class="pair">
+        <div class="col sample">
+          <div class="tag-row"><span class="badge" id="q10h">10</span><span class="tag">Sample Question</span></div>
+          <p class="q"><b>Q:</b> In the figure, the lines l, m, n and p are parallel and t is a transversal cutting all of them. If ∠1 = 68°, find ∠2, ∠3 and ∠4.</p>
+          <div class="note"><b>Tip:</b> Angles in the same position on every parallel line are equal (corresponding angles). Use linear pairs and vertically opposite angles to move between positions.</div>
+          <svg class="diagram" style="max-width:420px" viewBox="0 0 300 210" role="img" aria-label="Four parallel lines l, m, n and p cut by a transversal t. Angle 1 is 68 degrees at line l; angles 2, 3 and 4 are marked at lines m, n and p.">
+            <line class="ln" x1="30" y1="40" x2="266" y2="40"/>
+            <path class="ln" d="M251 34 L259 40 L251 46 M259 34 L267 40 L259 46"/>
+            <text class="lbl" x="10" y="46">l</text>
+            <line class="ln" x1="30" y1="82" x2="266" y2="82"/>
+            <path class="ln" d="M251 76 L259 82 L251 88 M259 76 L267 82 L259 88"/>
+            <text class="lbl" x="10" y="88">m</text>
+            <line class="ln" x1="30" y1="124" x2="266" y2="124"/>
+            <path class="ln" d="M251 118 L259 124 L251 130 M259 118 L267 124 L259 130"/>
+            <text class="lbl" x="10" y="130">n</text>
+            <line class="ln" x1="30" y1="166" x2="266" y2="166"/>
+            <path class="ln" d="M251 160 L259 166 L251 172 M259 160 L267 166 L259 172"/>
+            <text class="lbl" x="10" y="172">p</text>
+            <line class="ln" x1="200" y1="12" x2="98" y2="200"/>
+            <text class="lbl" x="206" y="16">t</text>
+            <path class="rd" d="M198.8 40 A14 14 0 0 0 191.5 27.7"/>
+            <text class="rlbl" x="214" y="27.6" text-anchor="middle">68°</text>
+            <path class="rd" d="M155.3 94.3 A14 14 0 0 0 176 82"/>
+            <text class="rlbl" x="173.2" y="105.9" text-anchor="middle">2</text>
+            <path class="rd" d="M125.1 124 A14 14 0 0 0 132.4 136.3"/>
+            <text class="rlbl" x="120.2" y="140.2" text-anchor="middle">3</text>
+            <path class="rd" d="M123 153.7 A14 14 0 0 0 102.3 166"/>
+            <text class="rlbl" x="105.1" y="152.1" text-anchor="middle">4</text>
+          </svg>
+          <ul class="opts">
+            <li><span class="k">A)</span> ∠2 = 112°, ∠3 = 112°, ∠4 = 68°</li>
+            <li><span class="k">B)</span> ∠2 = 112°, ∠3 = 68°, ∠4 = 112°</li>
+            <li><span class="k">C)</span> ∠2 = 68°, ∠3 = 112°, ∠4 = 112°</li>
+            <li><span class="k">D)</span> ∠2 = 68°, ∠3 = 68°, ∠4 = 112°</li>
+            <li><span class="k">E)</span> ∠2 = 112°, ∠3 = 68°, ∠4 = 68°</li>
+            <li><span class="k">F)</span> ∠2 = 68°, ∠3 = 112°, ∠4 = 68°</li>
+          </ul>
+          <p class="answer"><b>Answer:</b> <span class="a">B (∠2 = 112°, ∠3 = 68°, ∠4 = 112°)</span></p>
+          <p class="explain"><b>Explanation:</b> ∠1 = 68°, so the angle below it on line l (a linear pair) is 112°. Corresponding angles are equal, so ∠2 = 112°. At line n, the upper right angle is 68° (corresponding to ∠1), and ∠3 is vertically opposite it, so ∠3 = 68°. At line p, the lower right angle is 112°, and ∠4 is vertically opposite it, so ∠4 = 112°.</p>
+        </div>
+        <div class="col try">
+          <div class="tag-row"><span class="tag">Now You Try</span></div>
+          <p class="q"><b>Q:</b> In the figure, the lines l, m, n and p are parallel and t is a transversal cutting all of them. If ∠1 = 124°, find ∠2, ∠3 and ∠4.</p>
+          <div class="note"><b>Tip:</b> Angles in the same position on every parallel line are equal (corresponding angles). Use linear pairs and vertically opposite angles to move between positions.</div>
+          <svg class="diagram" style="max-width:420px" viewBox="0 0 300 210" role="img" aria-label="Four parallel lines l, m, n and p cut by a transversal t. Angle 1 is 124 degrees at line l; angles 2, 3 and 4 are marked at lines m, n and p.">
+            <line class="ln" x1="30" y1="40" x2="266" y2="40"/>
+            <path class="ln" d="M251 34 L259 40 L251 46 M259 34 L267 40 L259 46"/>
+            <text class="lbl" x="10" y="46">l</text>
+            <line class="ln" x1="30" y1="82" x2="266" y2="82"/>
+            <path class="ln" d="M251 76 L259 82 L251 88 M259 76 L267 82 L259 88"/>
+            <text class="lbl" x="10" y="88">m</text>
+            <line class="ln" x1="30" y1="124" x2="266" y2="124"/>
+            <path class="ln" d="M251 118 L259 124 L251 130 M259 118 L267 124 L259 130"/>
+            <text class="lbl" x="10" y="130">n</text>
+            <line class="ln" x1="30" y1="166" x2="266" y2="166"/>
+            <path class="ln" d="M251 160 L259 166 L251 172 M259 160 L267 166 L259 172"/>
+            <text class="lbl" x="10" y="172">p</text>
+            <line class="ln" x1="200" y1="12" x2="98" y2="200"/>
+            <text class="lbl" x="206" y="16">t</text>
+            <path class="rd" d="M178.1 52.3 A14 14 0 0 0 198.8 40"/>
+            <text class="rlbl" x="198.6" y="68.2" text-anchor="middle">124°</text>
+            <path class="rd" d="M176 82 A14 14 0 0 0 168.6 69.7"/>
+            <text class="rlbl" x="180.9" y="75.8" text-anchor="middle">2</text>
+            <path class="rd" d="M145.8 111.7 A14 14 0 0 0 125.1 124"/>
+            <text class="rlbl" x="127.9" y="110.1" text-anchor="middle">3</text>
+            <path class="rd" d="M102.3 166 A14 14 0 0 0 109.6 178.3"/>
+            <text class="rlbl" x="97.4" y="182.2" text-anchor="middle">4</text>
+          </svg>
+          <fieldset class="choices">
+            <legend class="sr" style="position:absolute;left:-9999px">Question 10 options</legend>
+            <label><input type="radio" name="t10"> A) ∠2 = 124°, ∠3 = 124°, ∠4 = 56°</label>
+            <label><input type="radio" name="t10"> B) ∠2 = 124°, ∠3 = 56°, ∠4 = 124°</label>
+            <label><input type="radio" name="t10"> C) ∠2 = 56°, ∠3 = 124°, ∠4 = 56°</label>
+            <label><input type="radio" name="t10"> D) ∠2 = 56°, ∠3 = 56°, ∠4 = 124°</label>
+            <label><input type="radio" name="t10"> E) ∠2 = 124°, ∠3 = 56°, ∠4 = 56°</label>
+            <label><input type="radio" name="t10"> F) ∠2 = 56°, ∠3 = 124°, ∠4 = 124°</label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="remember"><b>Remember:</b> When many parallel lines are cut by one transversal, corresponding angles at every line are equal. A linear pair adds up to 180°, and vertically opposite angles are equal, so every angle is either the given angle or 180° minus it.</div>
+    </article>
+
+  </div>
+
+  <section class="submit-card" aria-label="Submit homework">
+    <button type="button" class="start-btn" id="submit-btn">Submit Homework</button>
+    <p class="submit-msg" id="submit-msg" role="status"></p>
+    <button type="button" class="start-btn" id="view-results" hidden>View my results</button>
+  </section>
+</main>
+
+<div class="overlay res-overlay" id="res-overlay" role="dialog" aria-modal="true" aria-label="Your results" hidden>
+  <div class="res-modal">
+    <button type="button" class="x-btn" id="res-close" aria-label="Close results">&times;</button>
+    <div class="sheet results" id="results"></div>
+  </div>
+</div>
+
+<div class="overlay" id="warn" role="alertdialog" aria-modal="true" aria-labelledby="warn-title" hidden>
+  <div class="modal">
+    <h2 id="warn-title">Answer every question</h2>
+    <p id="warn-text"></p>
+    <div class="actions"><button type="button" class="start-btn" id="warn-ok">OK</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title" hidden>
+  <div class="modal">
+    <h2 id="gate-title">Homework in your copy</h2>
+
+    <div class="pane" id="pane-ask">
+      <p>Have you written this homework in your copy (notebook)?</p>
+      <div class="actions">
+        <button type="button" class="start-btn" id="gate-yes">I have written it in my copy</button>
+        <button type="button" class="start-btn alt" id="gate-no">I haven't written it yet</button>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-later" hidden>
+      <p>Kindly write the homework in your copy first. When it is done, press the Submit button again and choose &ldquo;I have written it in my copy&rdquo;.</p>
+      <div class="actions"><button type="button" class="start-btn" id="gate-ok">OK</button></div>
+    </div>
+
+    <div class="pane" id="pane-cam" hidden>
+      <p class="cam-instr">Choose photos of the homework pages you wrote in your copy (up to 5).</p>
+      <p class="cam-status" id="cam-status" role="status"></p>
+      <div class="actions">
+        <button type="button" class="start-btn" id="cam-gallery">Choose photos from gallery</button>
+        <input type="file" id="gallery-input" accept="image/*" multiple hidden>
+        <p class="side-note">(take photos using camera first)</p>
+        <button type="button" class="start-btn alt" id="cam-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-check" hidden>
+      <div class="thumbs" id="thumbs"></div>
+      <p class="cam-status" id="check-status" role="status" aria-live="polite"></p>
+      <div class="spinner" id="check-spin" role="presentation" hidden></div>
+      <div class="actions" id="check-actions" hidden>
+        <button type="button" class="start-btn" id="send-photos">Send photos</button>
+        <button type="button" class="start-btn alt" id="check-retake">Choose different photos</button>
+        <button type="button" class="start-btn alt" id="check-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-done" hidden>
+      <p class="verified">&#10003; Sent!</p>
+      <p class="done-msg">Your scores and homework photos have been sent to your math teacher.</p>
+      <div class="actions"><button type="button" class="start-btn" id="done-view">View my scores</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="rank-overlay" role="dialog" aria-modal="true" aria-labelledby="rank-pop-title" hidden>
+  <div class="modal rank-modal">
+    <button type="button" class="x-btn" id="rank-pop-close" aria-label="Close rankings">&times;</button>
+    <h2 id="rank-pop-title">Class rankings</h2>
+    <div id="rank-pop-body"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+  <form class="modal" id="details" novalidate>
+    <h2 id="dlg-title">Before you begin</h2>
+    <p>Enter your details to start the homework.</p>
+    <div class="field">
+      <label for="s-name">Name</label>
+      <input id="s-name" name="name" type="text" autocomplete="name" placeholder="Full name" required>
+    </div>
+    <div class="field">
+      <label for="s-class">Class</label>
+      <input id="s-class" name="class" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" placeholder="e.g. 7">
+    </div>
+    <div class="field">
+      <label for="s-phone">Phone Number</label>
+      <div class="phone-wrap">
+        <span class="cc" aria-hidden="true">+91</span>
+        <input id="s-phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]*" autocomplete="tel-national" maxlength="10" placeholder="10-digit mobile number" aria-label="Phone number, 10 digits after +91">
+      </div>
+    </div>
+    <p class="err" id="err" role="alert"></p>
+    <div class="actions">
+      <button type="submit" class="start-btn">Start Homework</button>
+    </div>
+    <div class="rank-entry">
+      <p class="re-title">Class-wise rankings</p>
+      <div class="rank-btns">
+        <button type="button" class="rank-open" data-class="7">Class 7<br>rankings</button>
+        <button type="button" class="rank-open" data-class="8">Class 8<br>rankings</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<style>
+/* Submit gate: "have you written it?" + camera check */
+#gate { z-index: 55; }
+#gate .pane[hidden] { display: none; }
+#gate .pane { display: flex; flex-direction: column; gap: 14px; }
+#gate .actions .alt { background: var(--sample); color: var(--ink); border: 2px solid var(--line); }
+.cam-instr { background: var(--note); border: 2px solid var(--note-rule); border-radius: 12px; padding: 10px 12px; color: var(--ink) !important; font-weight: 600; }
+.cam-frame { position: relative; border: 3px solid var(--line); border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 3 / 4; max-height: 52vh; width: 100%; display: grid; place-items: center; }
+.cam-frame video, .cam-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cam-status { min-height: 1.4em; font-weight: 600; color: var(--ink) !important; }
+.cam-status.bad { color: var(--red) !important; }
+.cam-help { background: var(--sample); border: 2px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: .95rem; color: var(--ink); }
+.cam-help ol { margin: 6px 0 0; padding-left: 20px; }
+.cam-help b { font-weight: 700; }
+.side-note { margin: -2px 0 2px; text-align: center; font-size: .85rem; color: var(--muted) !important; }
+.spinner { width: 34px; height: 34px; margin: 2px auto; border: 4px solid var(--sample-tag); border-top-color: var(--ell-line); border-radius: 50%; animation: gspin .8s linear infinite; }
+.spinner[hidden] { display: none; }
+@keyframes gspin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }
+.done-msg { text-align: center; font-weight: 600; color: var(--ink) !important; font-size: 1.05rem; }
+.thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+.thumbs img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border: 2px solid var(--line); border-radius: 10px; }
+.bar-track { height: 10px; border-radius: 6px; background: var(--sample); border: 2px solid var(--line); overflow: hidden; }
+.bar-fill { height: 100%; width: 0; background: var(--ell-line); transition: width .25s; }
+.verified { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; color: #1c7a3f; }
+:root[data-theme="dark"] .verified { color: #6fe0a0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .verified { color: #6fe0a0; } }
+</style>
+<script>
+(function () {
+  var overlay = document.getElementById('overlay');
+  var form = document.getElementById('details');
+  var main = document.querySelector('main');
+  var nameEl = document.getElementById('s-name');
+  var classEl = document.getElementById('s-class');
+  var phoneEl = document.getElementById('s-phone');
+  var err = document.getElementById('err');
+  var who = document.getElementById('who');
+  var whoText = document.getElementById('who-text');
+  var keys = { name: nameEl, cls: classEl, phone: phoneEl };
+
+  Object.keys(keys).forEach(function (k) {
+    try { var v = localStorage.getItem('hw-' + k); if (v) keys[k].value = v; } catch (e) {}
+  });
+
+  phoneEl.value = phoneEl.value.replace(/\D/g, '').slice(-10);
+  phoneEl.addEventListener('input', function () { phoneEl.value = phoneEl.value.replace(/\D/g, '').slice(0, 10); });
+  classEl.value = classEl.value.replace(/\D/g, '');
+  classEl.addEventListener('input', function () { classEl.value = classEl.value.replace(/\D/g, ''); });
+
+  function openDialog() {
+    overlay.hidden = false;
+    main.setAttribute('inert', '');
+    err.textContent = '';
+    (nameEl.value ? phoneEl.value ? nameEl : classEl : nameEl).focus();
+  }
+  function closeDialog() {
+    overlay.hidden = true;
+    main.removeAttribute('inert');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var n = nameEl.value.trim(), c = classEl.value.trim(), p = phoneEl.value.replace(/[\s+]/g, '');
+    if (!n) { err.textContent = 'Please enter your name.'; nameEl.focus(); return; }
+    if (!/^\d{1,2}$/.test(c)) { err.textContent = 'Please enter your class as a number, for example 7.'; classEl.focus(); return; }
+    if (!/^\d{10}$/.test(p)) { err.textContent = 'Please enter a 10-digit phone number.'; phoneEl.focus(); return; }
+    try {
+      localStorage.setItem('hw-name', n);
+      localStorage.setItem('hw-cls', c);
+      localStorage.setItem('hw-phone', phoneEl.value.trim());
+    } catch (e2) {}
+    whoText.textContent = n + ' · Class ' + c + ' · +91 ' + phoneEl.value.trim();
+    who.hidden = false;
+    closeDialog();
+  });
+
+  document.getElementById('who-edit').addEventListener('click', openDialog);
+  openDialog();
+})();
+</script>
+
+<script>
+/* ---------- result push to Google Sheet (Apps Script) ---------- */
+(function () {
+  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypo-5ThjzEFYh1t-dlCp94v01kU1wpxnu1WCNKLDgxfA3KXuN8Nh7c_XdiBqhTAfyxGA/exec";
+  var QUIZ_NAME = "Geometry Homework 8 Nov 2026";
+  // Correct option index (0 = A) for each "Now You Try" question
+  var KEY = { t1: 4, t2: 1, t3: 3, t4: 5, t5: 0, t6: 2, t7: 4, t8: 1, t9: 3, t10: 2 };
+  // Topic of each question, in order Q1 to Q10 (shown on each card and sent to the sheet)
+  var TOPICS = ['Natural, whole numbers and integers', 'Classifying numbers', 'Division by zero', 'Parallel and perpendicular line segments', 'Complementary and supplementary angles',
+                'Vertically opposite angles', 'Intersecting lines and equations (Challenge)', 'Parallel lines and a transversal', 'Angle at a bend (Challenge)', 'Several parallel lines (Challenge)'];
+  var btn = document.getElementById('submit-btn');
+  var msg = document.getElementById('submit-msg');
+  var resultSent = false;
+  var finalElapsed = null; // ms from the start of the homework to the moment of submit
+
+  // Why each answer is right, and the rule to remember (shown on the results page)
+  var QINFO = [
+    { why: 'Whole numbers are 0, 1, 2, 3, … and natural numbers are 1, 2, 3, …, so 0 is a whole number but not a natural number. 1 and 9 are both whole and natural, 5/2 is not whole, and −2 and −10 are negative, so they are not whole numbers.',
+      remember: 'Natural numbers are 1, 2, 3, … and whole numbers are natural numbers together with 0. Every natural number is a whole number, every whole number is an integer, every integer is rational, and every rational number is real.' },
+    { why: 'Rational numbers can be written as p/q. −6 = −6/1, 5/8, 0 = 0/1 and 4.5 = 9/2 are rational. √3 is irrational and 9i is imaginary.',
+      remember: 'Rational numbers can be written as p/q. Irrational numbers (such as √3 and π) cannot. Imaginary numbers (such as 5i) are not real. Rational and irrational numbers together make up the real numbers.' },
+    { why: '0 ÷ 5 = 0 because 0 × 5 = 0. But 5 ÷ 0 is undefined, because no number multiplied by 0 can give 5.',
+      remember: 'Dividing by zero is undefined, because no number multiplied by 0 can give a non-zero answer. But dividing zero by a non-zero number is fine: 0 ÷ 5 = 0.' },
+    { why: 'A rectangle has four right angles, so sides that meet at a corner, such as PQ and QR, are perpendicular. PQ ∥ RS and PS ∥ QR are parallel pairs, and the diagonals PR and QS are neither parallel nor perpendicular to the sides they meet.',
+      remember: 'In a rectangle, opposite sides are parallel and sides meeting at a corner are perpendicular. A line segment has two endpoints, and each side of the rectangle is a line segment.' },
+    { why: 'Complement = 90° − 57° = 33°. Supplement = 180° − 57° = 123°.',
+      remember: 'Complementary angles add up to 90°, and supplementary angles add up to 180°. A linear pair (two adjacent angles on a straight line) is always supplementary.' },
+    { why: '∠QOR is vertically opposite ∠POS, so it is 125°. ∠POR = 180° − 125° = 55° (linear pair), and ∠QOS is vertically opposite ∠POR, so it is also 55°.',
+      remember: 'Two intersecting lines form two pairs of equal vertically opposite angles, and every two adjacent angles add up to 180° (a linear pair).' },
+    { why: '∠POR and ∠POS form a linear pair: 7x + 8x = 180°, so 15x = 180° and x = 12. Then ∠POR = 7 × 12° = 84°. ∠QOS is vertically opposite ∠POR, so ∠QOS = 84°.',
+      remember: 'Adjacent angles on a straight line add up to 180°, so write an equation in x and solve it. Then use vertically opposite angles (which are equal) to find the remaining angles.' },
+    { why: '∠4 = 180° − 65° = 115° (linear pair with ∠2). ∠6 = ∠2 = 65° (corresponding angles). ∠7 = ∠2 = 65° (alternate exterior angles).',
+      remember: 'Use three facts: vertically opposite angles are equal, parallel lines make equal corresponding, alternate interior and alternate exterior angles, and a linear pair adds up to 180°.' },
+    { why: 'Draw a line through E parallel to PQ and RS. Co-interior angles give 180° − 150° = 30° and 180° − 130° = 50°. So ∠QES = 30° + 50° = 80°.',
+      remember: 'To find an angle at a bend between two parallel lines, draw a line through the bend point parallel to both. Each part is found with co-interior angles (sum 180°) or alternate angles (equal), and the angle at the bend is the sum of the two parts.' },
+    { why: 'The upper right angle at l is 180° − 124° = 56°, so ∠2 = 56° (corresponding angle at m). At line n, the lower right angle is 124° (corresponding to ∠1), and ∠3 is vertically opposite it, so ∠3 = 124°. At line p, the upper right angle is 56°, and ∠4 is vertically opposite it, so ∠4 = 56°.',
+      remember: 'When many parallel lines are cut by one transversal, corresponding angles at every line are equal. A linear pair adds up to 180°, and vertically opposite angles are equal, so every angle is either the given angle or 180° minus it.' }
+  ];
+
+  var home = document.getElementById('homework');
+  var resEl = document.getElementById('results');
+  var viewBtn = document.getElementById('view-results');
+  var startT = Date.now(), timerSet = false;
+  document.getElementById('details').addEventListener('submit', function () {
+    setTimeout(function () {
+      if (!timerSet && document.getElementById('overlay').hidden) { startT = Date.now(); timerSet = true; }
+    }, 0);
+  });
+
+  var resOverlay = document.getElementById('res-overlay');
+  var warnEl = document.getElementById('warn');
+  function showView(showResults) {
+    resOverlay.hidden = !showResults;
+    if (showResults) { home.setAttribute('inert', ''); resOverlay.scrollTop = 0; document.getElementById('res-close').focus(); }
+    else home.removeAttribute('inert');
+  }
+  var missedTarget = null;
+  function showWarn(text, target) {
+    missedTarget = target || null;
+    document.getElementById('warn-text').textContent = text;
+    warnEl.hidden = false;
+    home.setAttribute('inert', '');
+    document.getElementById('warn-ok').focus();
+  }
+  document.getElementById('warn-ok').addEventListener('click', function () {
+    warnEl.hidden = true;
+    home.removeAttribute('inert');
+    var t = missedTarget; missedTarget = null;
+    if (t) {
+      // wait a frame so the page is interactive again, then scroll up to the first missed question
+      requestAnimationFrame(function () {
+        t.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+        t.classList.remove('missed'); void t.offsetWidth; t.classList.add('missed');
+        setTimeout(function () { t.classList.remove('missed'); }, 2000);
+      });
+    }
+  });
+  document.getElementById('res-close').addEventListener('click', function () { showView(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!rankOv.hidden) closeRankPop();
+    else if (!warnEl.hidden) document.getElementById('warn-ok').click();
+    else if (!resOverlay.hidden) showView(false);
+  });
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+  function optText(name, i) {
+    var radios = document.querySelectorAll('input[name="' + name + '"]');
+    return radios[i] ? radios[i].parentNode.textContent.trim() : '';
+  }
+  function fmtPlain(sec) { return Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2); }
+  function fmtTime(ms) {
+    var s = Math.max(0, Math.round(ms / 1000)), m = Math.floor(s / 60);
+    return m + '<small> min </small>' + (s % 60) + '<small> s</small>';
+  }
+
+  function starPts(cx, cy, ro, ri) {
+    var pts = [];
+    for (var k = 0; k < 10; k++) {
+      var a = (-90 + k * 36) * Math.PI / 180, r = k % 2 ? ri : ro;
+      pts.push((cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * Math.sin(a)).toFixed(1));
+    }
+    return pts.join(' ');
+  }
+  function reduced() { return window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  function countUp(root) {
+    var els = root.querySelectorAll('.cnt');
+    if (reduced()) return;
+    els.forEach(function (el) {
+      var to = +el.getAttribute('data-to'), t0 = null;
+      el.textContent = '0';
+      function tick(t) {
+        if (t0 === null) t0 = t;
+        var u = Math.min(1, (t - t0) / 900);
+        el.textContent = String(Math.round(to * (1 - Math.pow(1 - u, 3))));
+        if (u < 1) requestAnimationFrame(tick); else el.textContent = String(to);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  function confetti() {
+    if (reduced()) return;
+    var box = document.createElement('div');
+    box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 44; i++) {
+      var p = document.createElement('i');
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.background = 'var(--t' + (1 + i % 5) + ')';
+      p.style.animationDelay = (Math.random() * 0.7) + 's';
+      p.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
+      p.style.setProperty('--x', (Math.random() * 160 - 80) + 'px');
+      p.style.setProperty('--r', (Math.random() * 720 - 360) + 'deg');
+      box.appendChild(p);
+    }
+    document.body.appendChild(box);
+    setTimeout(function () { box.remove(); }, 4800);
+  }
+
+  // Loads JSON from the Apps Script via a <script> tag (works from any page, no CORS problems)
+  function jsonp(url, ok, bad) {
+    var cb = 'rk_' + Date.now() + '_' + Math.floor(Math.random() * 1e6), done = false, sc = document.createElement('script');
+    function clean() { done = true; try { delete window[cb]; } catch (e) { window[cb] = undefined; } if (sc.parentNode) sc.parentNode.removeChild(sc); }
+    window[cb] = function (d) { if (done) return; clean(); ok(d); };
+    sc.onerror = function () { if (done) return; clean(); bad(); };
+    setTimeout(function () { if (!done) { clean(); bad(); } }, 15000);
+    sc.src = url + '&callback=' + cb + '&_=' + Date.now();
+    document.head.appendChild(sc);
+  }
+
+  var RANK_LOADING = '<div class="rank-loading" role="status" aria-live="polite"><div class="bar"></div><p class="rank-msg">Loading rankings…</p></div>';
+  function rankFirst(nm) { var f = String(nm || '').trim().split(/\s+/)[0] || ''; return f.charAt(0).toUpperCase() + f.slice(1).toLowerCase(); }
+  function rankListHTML(L) {
+    if (!L.length) return '';
+    return '<ol class="rank-list">' + L.map(function (x) {
+      var w = x.total ? Math.round(x.score / x.total * 100) : 0;
+      return '<li class="rank-row' + (x.rank <= 3 ? ' r' + x.rank : '') + (x.me ? ' me' : '') + '"><span class="fill" style="--w:' + w + '%"></span>' +
+             '<span class="rk">' + x.rank + '</span><span class="rn">' + esc(rankFirst(x.name)) + '</span>' +
+             '<span class="rs">' + x.score + '<small> / ' + x.total + (x.time != null && x.time !== '' ? ' · ' + fmtPlain(Math.round(x.time)) : '') + '</small></span></li>';
+    }).join('') + '</ol>';
+  }
+
+  // ---- Class ranking, read from the Google Sheet (first attempt per student only) ----
+  function loadRanking(clsNum, phone, score, total, attempt) {
+    var box = document.getElementById('rank-body');
+    if (!box) return;
+    if (isNaN(clsNum)) { box.innerHTML = '<p class="rank-msg">Enter your class number to see rankings.</p>'; return; }
+    var url = APPS_SCRIPT_URL + '?action=ranking&quiz=' + encodeURIComponent(QUIZ_NAME) +
+              '&class=' + clsNum + '&phone=' + encodeURIComponent(phone) +
+              '&name=' + encodeURIComponent(document.getElementById('s-name').value.trim());
+    jsonp(url, function (d) {
+      if (!d || d.error || !d.list) { fail('The sheet script replied with: ' + (d && d.error ? d.error : 'unexpected data') + '. Redeploy it as a New version.'); return; }
+      var me = null;
+      d.list.forEach(function (x) { if (x.me) me = x; });
+      // Our own row can take a few seconds to reach the sheet: keep the list hidden and look again
+      // until the student's own entry is found (or we give up after about 20 seconds)
+      if (!me && phone && attempt < 8) { setTimeout(function () { loadRanking(clsNum, phone, score, total, attempt + 1); }, 2500); return; }
+      if (!d.list.length) { box.innerHTML = '<p class="rank-msg">No Class ' + clsNum + ' results yet.</p>'; return; }
+      var L = d.list, n = L.length;
+      var html = me
+        ? '<div class="rank-hero"><span>Your rank</span><b>#' + me.rank + '</b><span>of ' + n + ' in Class ' + clsNum + '</span></div>'
+        : '<p class="rank-sub">' + n + (n === 1 ? ' student has' : ' students have') + ' attempted</p>';
+      html += rankListHTML(L);
+      if (me && (me.score !== score || me.total !== total)) {
+        html += '<p class="rank-note">Rankings use each student\'s first attempt. Your first attempt was ' + me.score + ' / ' + me.total + '.</p>';
+      } else if (!me && phone) {
+        html += '<p class="rank-note">Your result has not reached the sheet yet, so your own rank is not shown.</p>';
+      } else {
+        html += '<p class="rank-note">Rankings use each student\'s first attempt only. Ties on marks are ranked by the faster time.</p>';
+      }
+      box.innerHTML = html;
+    }, function () {
+      fail('Could not reach the sheet script. Check that it is deployed as a New version with access set to Anyone.');
+    });
+
+    function fail(why) {
+      if (attempt < 3) { setTimeout(function () { loadRanking(clsNum, phone, score, total, attempt + 1); }, 3000); return; }
+      box.innerHTML = '<p class="rank-msg">Could not load rankings. ' + esc(why) + '</p>';
+    }
+  }
+
+  // ---- Class-wise rankings popup (opened from the first screen) ----
+  var rankOv = document.getElementById('rank-overlay'), popToken = 0, popFocus = null;
+  function closeRankPop() { popToken++; rankOv.hidden = true; if (popFocus && popFocus.focus) popFocus.focus(); }
+  function openRankPop(clsNum, opener) {
+    var body = document.getElementById('rank-pop-body'), token = ++popToken;
+    popFocus = opener || null;
+    document.getElementById('rank-pop-title').textContent = 'Class ' + clsNum + ' rankings';
+    body.innerHTML = RANK_LOADING;
+    rankOv.hidden = false; rankOv.scrollTop = 0;
+    document.getElementById('rank-pop-close').focus();
+    (function load(attempt) {
+      function fail(why) {
+        if (token !== popToken) return;
+        if (attempt < 3) { setTimeout(function () { if (token === popToken) load(attempt + 1); }, 2500); return; }
+        body.innerHTML = '<p class="rank-msg">Could not load rankings. ' + esc(why) + '</p>';
+      }
+      jsonp(APPS_SCRIPT_URL + '?action=ranking&quiz=' + encodeURIComponent(QUIZ_NAME) + '&class=' + clsNum, function (d) {
+        if (token !== popToken) return;
+        if (!d || d.error || !d.list) { fail('The sheet script replied with: ' + (d && d.error ? d.error : 'unexpected data') + '.'); return; }
+        if (!d.list.length) { body.innerHTML = '<p class="rank-msg">No Class ' + clsNum + ' results yet.</p>'; return; }
+        var n = d.list.length;
+        body.innerHTML = '<p class="rank-sub">' + n + (n === 1 ? ' student has' : ' students have') + ' attempted · highest marks first</p>' +
+          rankListHTML(d.list) + '<p class="rank-note">Rankings use each student\'s first attempt only. Ties on marks are ranked by the faster time.</p>';
+      }, function () { fail('Could not reach the sheet script.'); });
+    })(1);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.rank-open'), function (b) {
+    b.addEventListener('click', function () { openRankPop(parseInt(b.getAttribute('data-class'), 10), b); });
+  });
+  document.getElementById('rank-pop-close').addEventListener('click', closeRankPop);
+  rankOv.addEventListener('click', function (e) { if (e.target === rankOv) closeRankPop(); });
+
+  function renderResults(name, cls, score, total) {
+    var keys = Object.keys(KEY);
+    var pct = Math.round(score / total * 100);
+    var C = 2 * Math.PI * 52, dash = (pct / 100 * C).toFixed(1);
+    var elapsed = finalElapsed != null ? finalElapsed : Date.now() - startT;
+    var verdict = pct === 100 ? 'Perfect score' : pct >= 80 ? 'Strong work' : pct >= 60 ? 'Good start' : 'Keep practising';
+    var hello = pct >= 80 ? 'Well done' : pct >= 60 ? 'Nice effort' : 'Good try';
+    var rows = keys.map(function (k, i) {
+      var c = chosen(k);
+      return { n: i + 1, topic: TOPICS[i], good: c === KEY[k], mine: optText(k, c), right: optText(k, KEY[k]), info: QINFO[i] };
+    });
+    var bad = rows.filter(function (r) { return !r.good; });
+    var good = rows.length - bad.length;
+    var best = 0, cur = 0;
+    rows.forEach(function (r) { if (r.good) { cur++; best = Math.max(best, cur); } else cur = 0; });
+    var avg = Math.round(elapsed / 1000 / total);
+
+    var proto = '<svg class="proto" viewBox="0 0 220 120" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2">' +
+      '<path d="M10 110 A100 100 0 0 1 210 110 Z"/><path d="M40 110 A70 70 0 0 1 180 110"/>' +
+      (function () { var t = ''; for (var d = 0; d <= 180; d += 10) { var a = d * Math.PI / 180, x1 = 110 - 100 * Math.cos(a), y1 = 110 - 100 * Math.sin(a), l = d % 30 ? 8 : 14, x2 = 110 - (100 - l) * Math.cos(a), y2 = 110 - (100 - l) * Math.sin(a); t += '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '"/>'; } return t; })() +
+      '</g></svg>';
+
+    var stars = '<svg class="stars" viewBox="0 0 ' + (total * 24) + ' 24" role="img" aria-label="' + score + ' of ' + total + ' stars">';
+    for (var i = 0; i < total; i++) stars += '<polygon class="star' + (i < score ? ' on' : '') + '" style="--i:' + i + '" points="' + starPts(12 + i * 24, 12.5, 10.5, 4.4) + '"/>';
+    stars += '</svg>';
+
+    var S = {};
+    S.head = '<header class="res-head">' + proto + '<div class="res-eyebrow">Geometry Homework · 8 November 2026</div><h1>' + hello + ', ' + esc(name.split(' ')[0]) + '!</h1>' +
+         '<div class="res-who">' + esc(name) + ' · Class ' + esc(cls) + '</div>' + stars + '</header>';
+
+    S.ring = '<section class="top-analytics"><h2 class="an-title an-top">Your analytics</h2><div class="ring-card">' +
+         '<svg class="ring' + (pct < 60 ? ' low' : '') + '" viewBox="0 0 120 120" role="img" aria-label="Score ' + score + ' out of ' + total + ', ' + pct + ' percent">' +
+         '<circle class="ring-bg" cx="60" cy="60" r="52"/>' +
+         '<circle class="ring-fg" cx="60" cy="60" r="52" stroke-dasharray="' + dash + ' ' + C.toFixed(1) + '" transform="rotate(-90 60 60)"/>' +
+         '<text class="ring-num" x="60" y="62" text-anchor="middle">' + score + '/' + total + '</text>' +
+         '<text class="ring-pct" x="60" y="82" text-anchor="middle">' + pct + '%</text></svg>' +
+         '<div class="verdict">' + verdict + '</div></div></section>';
+
+    S.overview = '<section class="overview overview-stats">' +
+         '<div class="stats">' +
+         '<div class="stat" style="--sc:var(--t3)"><span class="k">Correct answers</span><span class="v"><span class="cnt" data-to="' + score + '">' + score + '</span><small> of ' + total + '</small></span></div>' +
+         '<div class="stat" style="--sc:var(--t1)"><span class="k">Time taken</span><span class="v">' + fmtTime(elapsed) + '</span></div>' +
+         '<div class="stat" style="--sc:var(--t5)"><span class="k">Best streak</span><span class="v"><span class="cnt" data-to="' + best + '">' + best + '</span><small> in a row</small></span></div>' +
+         '<div class="stat" style="--sc:var(--t4)"><span class="k">Pace</span><span class="v"><span class="cnt" data-to="' + avg + '">' + avg + '</span><small> s per question</small></span></div>' +
+         '</div></section>';
+
+    S.trail = '<section class="panel"><h2>Your answer trail</h2><div class="trail">' +
+         rows.map(function (r, i) {
+           return '<div class="step ' + (r.good ? 'good' : 'bad') + '" style="--i:' + i + '"><span class="dot" aria-hidden="true">' + (r.good ? '✓' : '✕') + '</span>' +
+                  '<span class="lab">Q' + r.n + '</span><span class="sr" style="position:absolute;left:-9999px">' + (r.good ? 'Correct' : 'Incorrect') + '</span></div>';
+         }).join('') + '</div></section>';
+
+    S.topic = '<section class="panel"><h2>Topic map</h2><div class="tmap">' +
+         rows.map(function (r) {
+           return '<div class="tile ' + (r.good ? 'good' : 'bad') + '" style="--th:var(--t' + (((r.n - 1) % 5) + 1) + ')"><span class="tq">Q' + r.n + '</span><span class="tn">' + esc(r.topic) +
+                  '</span><span class="ts">' + (r.good ? 'Mastered' : 'Revise') + '</span></div>';
+         }).join('') + '</div></section>';
+
+    S.next = '<div class="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>' +
+         (bad.length ? 'Next step: revise ' + bad.map(function (r) { return esc(r.topic); }).join(', ') + ', then use the answer review above.' : 'Every topic mastered. Try the Challenge questions again without looking at the samples.') + '</span></div>';
+
+    S.revise = '<section class="panel"><h2>What to revise</h2>' +
+         (bad.length ? bad.map(function (r) {
+           return '<div class="rev"><h3>Q' + r.n + ' · ' + esc(r.topic) + '</h3><p><b>Remember:</b> ' + esc(r.info.remember) + '</p></div>';
+         }).join('') : '<div class="allgood">Nothing to revise. Every topic was answered correctly.</div>') + '</section>';
+
+    S.review = '<section class="panel"><h2>Answer review</h2>' +
+         rows.map(function (r) {
+           return '<details class="qrev ' + (r.good ? 'good' : 'bad') + '"' + (r.good ? '' : ' open') + '><summary class="qh"><span class="qn">Q' + r.n + '</span><span class="qt">' + esc(r.topic) + '</span>' +
+                  '<span class="pill-res ' + (r.good ? 'good' : 'bad') + '">' + (r.good ? 'Correct' : 'Incorrect') + '</span></summary>' +
+                  '<div class="qb"><div><b>Your answer:</b> ' + esc(r.mine) + '</div>' +
+                  (r.good ? '' : '<div><b>Correct answer:</b> ' + esc(r.right) + '</div>') +
+                  '<div class="why">' + esc(r.info.why) + '</div></div></details>';
+         }).join('') + '</section>';
+
+    var clsNum = parseInt(String(cls).replace(/\D/g, ''), 10);
+    S.rank = '<section class="panel" id="rank-panel"><h2>' + (isNaN(clsNum) ? 'Class rankings' : 'Class ' + clsNum + ' rankings') + '</h2>' +
+         '<div id="rank-body"><div class="rank-loading" role="status" aria-live="polite"><div class="bar"></div><p class="rank-msg">Loading rankings…</p></div></div></section>';
+
+    var h = S.head + S.ring + S.rank + S.review + '<h2 class="an-title">More analytics</h2>' + S.overview + S.trail + S.topic + S.revise + S.next;
+    h += '<div class="back-row"><button type="button" class="start-btn" id="back-hw">Close and review homework</button></div>';
+    resEl.innerHTML = h;
+    loadRanking(clsNum, document.getElementById('s-phone').value.trim(), score, total, 1);
+    countUp(resEl);
+    if (pct >= 80) confetti();
+  }
+
+  resEl.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'back-hw') showView(false);
+  });
+  viewBtn.addEventListener('click', function () { showView(true); });
+
+  function setMsg(text, cls) { msg.textContent = text; msg.className = 'submit-msg ' + (cls || ''); }
+
+  function chosen(name) {
+    var radios = document.querySelectorAll('input[name="' + name + '"]');
+    for (var i = 0; i < radios.length; i++) if (radios[i].checked) return i;
+    return -1;
+  }
+
+  function ensureFrame() {
+    var fr = document.getElementById('submissionFrame');
+    if (!fr) {
+      fr = document.createElement('iframe');
+      fr.name = fr.id = 'submissionFrame';
+      fr.style.display = 'none';
+      fr.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(fr);
+    }
+    return fr;
+  }
+  ensureFrame(); // create early so its blank first load is over before we submit
+
+  // Posts the data; calls onDone when the Google Script has answered (or after 60 s at most)
+  function submitResult(data, onDone) {
+    var fr = ensureFrame(), finished = false, t0 = Date.now(), tm;
+    function done() {
+      if (finished) return;
+      finished = true; fr.onload = null; clearTimeout(tm);
+      if (onDone) onDone();
+    }
+    tm = setTimeout(done, 60000);
+    fr.onload = function () { setTimeout(done, Math.max(0, 600 - (Date.now() - t0))); };
+    var f = document.createElement('form');
+    f.method = 'POST'; f.action = APPS_SCRIPT_URL; f.target = 'submissionFrame'; f.style.display = 'none';
+    Object.keys(data).forEach(function (k) {
+      var i = document.createElement('input');
+      i.type = 'hidden'; i.name = k; i.value = data[k];
+      f.appendChild(i);
+    });
+    document.body.appendChild(f);
+    f.submit();
+    f.remove();
+  }
+
+  /* ================= Submit gate: written-in-copy check + camera + math verification ================= */
+  // Tuning knobs (teacher can adjust)
+  var gate = document.getElementById('gate');
+  var panes = ['ask', 'later', 'cam', 'check', 'done'];
+  var camStatus = document.getElementById('cam-status');
+  var verifiedOnce = false, photosB64 = [];
+
+  function showPane(n) {
+    panes.forEach(function (p) { document.getElementById('pane-' + p).hidden = (p !== n); });
+  }
+  function openGate() { showPane('ask'); gate.hidden = false; home.setAttribute('inert', ''); document.getElementById('gate-yes').focus(); }
+  function closeGate() { gate.hidden = true; home.removeAttribute('inert'); }
+
+  // Photos accepted: show them, confirm, then submit
+  var MAX_PHOTOS = 5;
+  function shrink(canvas) {
+    var k = Math.min(1, 1280 / Math.max(canvas.width, canvas.height));
+    var sm = document.createElement('canvas'); sm.width = Math.round(canvas.width * k); sm.height = Math.round(canvas.height * k);
+    sm.getContext('2d').drawImage(canvas, 0, 0, sm.width, sm.height);
+    return sm;
+  }
+  function acceptPhotos(canvases) {
+    var st = document.getElementById('check-status'), th = document.getElementById('thumbs');
+    th.innerHTML = ''; photosB64 = [];
+    canvases.forEach(function (cv) {
+      var sm = shrink(cv);
+      photosB64.push(sm.toDataURL('image/jpeg', 0.7).split(',')[1] || '');
+      var im = document.createElement('img'); im.alt = 'Your photo'; im.src = sm.toDataURL('image/jpeg', 0.5);
+      th.appendChild(im);
+    });
+    document.getElementById('check-spin').hidden = true;
+    st.className = 'cam-status';
+    st.textContent = canvases.length + (canvases.length === 1 ? ' photo selected.' : ' photos selected.') + ' Tap Send photos to submit.';
+    document.getElementById('check-actions').hidden = false;
+    document.getElementById('send-photos').focus();
+  }
+
+  document.getElementById('gate-yes').addEventListener('click', function () { showPane('cam'); camStatus.textContent = ''; });
+  document.getElementById('gate-no').addEventListener('click', function () { showPane('later'); document.getElementById('gate-ok').focus(); });
+  document.getElementById('gate-ok').addEventListener('click', closeGate);
+  var galBtn = document.getElementById('cam-gallery'), galIn = document.getElementById('gallery-input');
+  galBtn.addEventListener('click', function () { galIn.value = ''; galIn.click(); });
+  galIn.addEventListener('change', async function () {
+    var files = Array.prototype.slice.call(galIn.files || []);
+    if (!files.length) return;
+    function bad(t) { camStatus.className = 'cam-status bad'; camStatus.textContent = t; }
+    if (files.length > MAX_PHOTOS) return bad('Please choose up to ' + MAX_PHOTOS + ' photos.');
+    // show the popup straight away with a spinner while the photos are loaded
+    document.getElementById('thumbs').innerHTML = '';
+    document.getElementById('check-actions').hidden = true;
+    document.getElementById('check-spin').hidden = false;
+    var cs = document.getElementById('check-status'); cs.className = 'cam-status'; cs.textContent = 'Uploading photos\u2026 please wait';
+    showPane('check');
+    try {
+      var canvases = [];
+      for (var j = 0; j < files.length; j++) {
+        var bmp = await createImageBitmap(files[j]);
+        var c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
+        c.getContext('2d').drawImage(bmp, 0, 0);
+        if (bmp.close) bmp.close();
+        canvases.push(c);
+      }
+      acceptPhotos(canvases);
+    } catch (e) {
+      showPane('cam'); bad('Could not open one of the photos. Try again.');
+    }
+  });
+  document.getElementById('cam-cancel').addEventListener('click', closeGate);
+  document.getElementById('check-cancel').addEventListener('click', closeGate);
+  document.getElementById('send-photos').addEventListener('click', function () {
+    document.getElementById('check-actions').hidden = true;
+    document.getElementById('check-spin').hidden = false;
+    var cs = document.getElementById('check-status'); cs.className = 'cam-status'; cs.textContent = 'Sending your photos and scores\u2026 please wait';
+    verifiedOnce = true;
+    proceedSubmit(true);
+  });
+  document.getElementById('done-view').addEventListener('click', function () { closeGate(); showView(true); });
+  document.getElementById('check-retake').addEventListener('click', function () { showPane('cam'); camStatus.textContent = ''; });
+
+  // Submit button: unanswered-question check first, then the written-in-copy gate
+  btn.addEventListener('click', function () {
+    if (resultSent) return;
+    var keys = Object.keys(KEY), missing = false;
+    keys.forEach(function (k) { if (chosen(k) < 0) missing = true; });
+    if (missing) { proceedSubmit(false); return; } // shows the usual "answer every question" warning
+    openGate();
+  });
+
+  function proceedSubmit(verified) {
+    if (resultSent) return;
+    var keys = Object.keys(KEY), score = 0, unanswered = [], ok = [], revise = [], res = {};
+    keys.forEach(function (k, idx) {
+      var c = chosen(k), label = 'Q' + (idx + 1) + ' ' + TOPICS[idx];
+      if (c < 0) { unanswered.push(idx + 1); return; }
+      if (c === KEY[k]) { score++; ok.push(label); res['q' + (idx + 1)] = 'Correct'; }
+      else { revise.push(label); res['q' + (idx + 1)] = 'Wrong'; }
+    });
+    if (unanswered.length) {
+      setMsg('', '');
+      var firstMissed = document.querySelector('input[name="' + keys[unanswered[0] - 1] + '"]');
+      showWarn('Please answer the Now You Try part of question ' + unanswered.join(', ') + ' before submitting.',
+               firstMissed ? firstMissed.closest('.try') : null);
+      return;
+    }
+    var total = keys.length;
+    var name = document.getElementById('s-name').value.trim();
+    var cls = document.getElementById('s-class').value.trim();
+    var phone = document.getElementById('s-phone').value.trim();
+    resultSent = true;
+    btn.disabled = true;
+    finalElapsed = Date.now() - startT;
+    var secs = Math.max(0, Math.round(finalElapsed / 1000));
+    var payload = {
+      name: name,
+      class: cls, Class: cls, className: cls, studentClass: cls,
+      phone: phone, Phone: phone,
+      quiz: QUIZ_NAME,
+      score: String(score),
+      total: String(total),
+      percentage: (total ? (score / total) * 100 : 0).toFixed(1),
+      timeTaken: String(secs),
+      timeFormatted: fmtPlain(secs),
+      q1: res.q1, q2: res.q2, q3: res.q3, q4: res.q4, q5: res.q5,
+      q6: res.q6, q7: res.q7, q8: res.q8, q9: res.q9, q10: res.q10,
+      topicsCorrect: ok.join(', '),
+      topicsRevise: revise.join(', '),
+      photoAttached: verifiedOnce ? 'Yes' : 'No',
+      photoCount: String(photosB64.length)
+    };
+    var base = (name + '_' + cls + '_' + phone).replace(/[^\w\-]+/g, '_');
+    photosB64.forEach(function (b64, i) {
+      payload['photoName' + (i + 1)] = base + (photosB64.length > 1 ? '_p' + (i + 1) : '') + '.jpg';
+      payload['photoData' + (i + 1)] = b64;
+    });
+    submitResult(payload, function () {
+      setMsg('Homework submitted, ' + name + '. Score: ' + score + ' / ' + total + '. Your scores and homework photos have been sent to your math teacher.', 'good');
+      viewBtn.hidden = false;
+      renderResults(name, cls, score, total); // after the upload, so the rankings include this submission
+      document.getElementById('check-spin').hidden = true;
+      showPane('done');
+      document.getElementById('done-view').focus();
+    });
+  }
+})();
+</script>
