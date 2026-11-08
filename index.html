@@ -1180,7 +1180,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
       <div class="actions">
         <button type="button" class="start-btn" id="cam-gallery">Choose photos from gallery</button>
         <input type="file" id="gallery-input" accept="image/*" multiple hidden>
-        <p class="side-note">(take photos using camera first)</p>
+        <p class="side-note">Take photos using your camera first, then choose them from the gallery.</p>
         <button type="button" class="start-btn alt" id="cam-cancel">Cancel</button>
       </div>
     </div>
@@ -1260,7 +1260,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
 .cam-help { background: var(--sample); border: 2px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: .95rem; color: var(--ink); }
 .cam-help ol { margin: 6px 0 0; padding-left: 20px; }
 .cam-help b { font-weight: 700; }
-.side-note { margin: -2px 0 2px; text-align: center; font-size: .85rem; color: var(--muted) !important; }
+.side-note { margin: 0; text-align: center; font-size: 1.05rem; font-weight: 700; line-height: 1.35; color: var(--red) !important; background: color-mix(in srgb, var(--red) 10%, var(--paper)); border: 2px solid var(--red); border-radius: 10px; padding: 8px 12px; }
 .spinner { width: 34px; height: 34px; margin: 2px auto; border: 4px solid var(--sample-tag); border-top-color: var(--ell-line); border-radius: 50%; animation: gspin .8s linear infinite; }
 .spinner[hidden] { display: none; }
 @keyframes gspin { to { transform: rotate(360deg); } }
