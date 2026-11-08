@@ -1814,7 +1814,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
   document.getElementById('check-cancel').addEventListener('click', closeGate);
   document.getElementById('send-photos').addEventListener('click', function () {
     if (this.disabled) return;
-    Array.prototype.forEach.call(document.querySelectorAll('#gate button'), function (b) { b.disabled = true; });
+    Array.prototype.forEach.call(document.querySelectorAll('#pane-check button'), function (b) { b.disabled = true; });
     this.textContent = 'Sending\u2026';
     document.getElementById('check-spin').hidden = false;
     var cs = document.getElementById('check-status'); cs.className = 'cam-status'; cs.textContent = 'Sending your photos and scores\u2026 please wait';
