@@ -1191,6 +1191,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
       <div class="spinner" id="check-spin" role="presentation" hidden></div>
       <div class="actions" id="check-actions" hidden>
         <button type="button" class="start-btn" id="send-photos">Send photos</button>
+        <button type="button" class="start-btn alt" id="add-photos">Add more photos</button>
         <button type="button" class="start-btn alt" id="check-retake">Choose different photos</button>
         <button type="button" class="start-btn alt" id="check-cancel">Cancel</button>
       </div>
@@ -1713,7 +1714,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
   function closeGate() { gate.hidden = true; home.removeAttribute('inert'); }
 
   // Photos accepted: show them, confirm, then submit
-  var MAX_PHOTOS = 5;
+  var MAX_PHOTOS = 10;
   function shrink(canvas) {
     var k = Math.min(1, 1280 / Math.max(canvas.width, canvas.height));
     var sm = document.createElement('canvas'); sm.width = Math.round(canvas.width * k); sm.height = Math.round(canvas.height * k);
@@ -1733,6 +1734,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
     st.className = 'cam-status';
     st.textContent = canvases.length + (canvases.length === 1 ? ' photo selected.' : ' photos selected.') + ' Tap Send photos to submit.';
     document.getElementById('check-actions').hidden = false;
+    document.getElementById('add-photos').hidden = canvases.length >= MAX_PHOTOS;
     document.getElementById('send-photos').disabled = false;
     document.getElementById('send-photos').focus();
   }
@@ -1740,32 +1742,72 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
   document.getElementById('gate-yes').addEventListener('click', function () { showPane('cam'); camStatus.textContent = ''; });
   document.getElementById('gate-no').addEventListener('click', function () { showPane('later'); document.getElementById('gate-ok').focus(); });
   document.getElementById('gate-ok').addEventListener('click', closeGate);
+  // Opens one photo and shrinks it straight away (max 1280px), so only one full-size image is ever in memory
+  function loadSmall(file) {
+    function toSmall(src, w, h) {
+      var k = Math.min(1, 1280 / Math.max(w, h));
+      var c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w * k)); c.height = Math.max(1, Math.round(h * k));
+      c.getContext('2d').drawImage(src, 0, 0, c.width, c.height);
+      return c;
+    }
+    function viaImg() {
+      return new Promise(function (res, rej) {
+        var u = URL.createObjectURL(file), im = new Image();
+        im.onload = function () {
+          try { var c = toSmall(im, im.naturalWidth, im.naturalHeight); URL.revokeObjectURL(u); res(c); }
+          catch (e) { URL.revokeObjectURL(u); rej(e); }
+        };
+        im.onerror = function () { URL.revokeObjectURL(u); rej(new Error('decode')); };
+        im.src = u;
+      });
+    }
+    return viaImg().catch(function () {
+      if (!window.createImageBitmap) throw new Error('unsupported');
+      return createImageBitmap(file).then(function (bmp) {
+        var c = toSmall(bmp, bmp.width, bmp.height); if (bmp.close) bmp.close(); return c;
+      });
+    });
+  }
   var galBtn = document.getElementById('cam-gallery'), galIn = document.getElementById('gallery-input');
-  galBtn.addEventListener('click', function () { galIn.value = ''; galIn.click(); });
+  var kept = [], addMode = false;
+  galBtn.addEventListener('click', function () { addMode = false; kept = []; galIn.value = ''; galIn.click(); });
+  document.getElementById('add-photos').addEventListener('click', function () { addMode = true; galIn.value = ''; galIn.click(); });
   galIn.addEventListener('change', async function () {
     var files = Array.prototype.slice.call(galIn.files || []);
     if (!files.length) return;
     function bad(t) { camStatus.className = 'cam-status bad'; camStatus.textContent = t; }
-    if (files.length > MAX_PHOTOS) return bad('Please choose up to ' + MAX_PHOTOS + ' photos.');
+    var base = addMode ? kept.slice() : [];
+    if (base.length + files.length > MAX_PHOTOS) {
+      var room = MAX_PHOTOS - base.length;
+      var msg = base.length ? ('You can add only ' + room + ' more photo' + (room === 1 ? '' : 's') + ' (maximum ' + MAX_PHOTOS + ').') : ('Please choose up to ' + MAX_PHOTOS + ' photos.');
+      if (base.length) { var st0 = document.getElementById('check-status'); st0.className = 'cam-status bad'; st0.textContent = msg; return; }
+      return bad(msg);
+    }
     // show the popup straight away with a spinner while the photos are loaded
-    document.getElementById('thumbs').innerHTML = '';
+    if (!base.length) document.getElementById('thumbs').innerHTML = '';
     document.getElementById('check-actions').hidden = true;
     document.getElementById('check-spin').hidden = false;
     document.getElementById('send-photos').disabled = true;
     var cs = document.getElementById('check-status'); cs.className = 'cam-status'; cs.textContent = 'Uploading photos\u2026 please wait';
     showPane('check');
-    try {
-      var canvases = [];
-      for (var j = 0; j < files.length; j++) {
-        var bmp = await createImageBitmap(files[j]);
-        var c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
-        c.getContext('2d').drawImage(bmp, 0, 0);
-        if (bmp.close) bmp.close();
-        canvases.push(c);
-      }
-      acceptPhotos(canvases);
-    } catch (e) {
-      showPane('cam'); bad('Could not open one of the photos. Try again.');
+    // Photos that cannot be opened are skipped; every photo that can be opened is kept
+    var canvases = base.slice(), skipped = [];
+    for (var j = 0; j < files.length; j++) {
+      cs.textContent = 'Uploading photo ' + (j + 1) + ' of ' + files.length + '\u2026 please wait';
+      try { canvases.push(await loadSmall(files[j])); }
+      catch (e) { skipped.push((files[j] && files[j].name) || ('photo ' + (j + 1))); }
+    }
+    if (canvases.length === base.length) {
+      // nothing new could be opened
+      var errTxt = (files.length === 1 ? 'Could not open the photo' : 'Could not open any of the photos') + ' (' + skipped.join(', ') + '). Please retake or choose different photos, then try again.';
+      if (base.length) { kept = base; acceptPhotos(base); var st1 = document.getElementById('check-status'); st1.className = 'cam-status bad'; st1.textContent = errTxt; return; }
+      showPane('cam'); bad(errTxt); return;
+    }
+    kept = canvases;
+    acceptPhotos(canvases);
+    if (skipped.length) {
+      var st2 = document.getElementById('check-status'); st2.className = 'cam-status bad';
+      st2.textContent = canvases.length + (canvases.length === 1 ? ' photo' : ' photos') + ' ready. Could not open ' + skipped.length + ' (' + skipped.join(', ') + '), so ' + (skipped.length === 1 ? 'it was' : 'they were') + ' left out. Tap Send photos to submit the rest.';
     }
   });
   document.getElementById('cam-cancel').addEventListener('click', closeGate);
@@ -1780,7 +1822,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
     proceedSubmit(true);
   });
   document.getElementById('done-view').addEventListener('click', function () { closeGate(); showView(true); });
-  document.getElementById('check-retake').addEventListener('click', function () { showPane('cam'); camStatus.textContent = ''; });
+  document.getElementById('check-retake').addEventListener('click', function () { kept = []; addMode = false; showPane('cam'); camStatus.textContent = ''; });
 
   // Submit button: unanswered-question check first, then the written-in-copy gate
   btn.addEventListener('click', function () {
