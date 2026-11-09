@@ -1138,7 +1138,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
   <section class="submit-card" aria-label="Submit homework">
     <button type="button" class="start-btn" id="submit-btn">Submit Homework</button>
     <p class="submit-msg" id="submit-msg" role="status"></p>
-    <button type="button" class="start-btn" id="view-results" hidden>View my results</button>
+    <button type="button" class="start-btn" id="view-results" hidden>View score and answers</button>
   </section>
 </main>
 
@@ -1198,9 +1198,12 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
     </div>
 
     <div class="pane" id="pane-done" hidden>
-      <p class="verified">&#10003; Sent!</p>
-      <p class="done-msg">Your scores and homework photos have been sent to your math teacher.</p>
-      <div class="actions"><button type="button" class="start-btn" id="done-view">View my scores</button></div>
+      <div class="sent-badge" aria-hidden="true">
+        <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l8 8 l15 -17"/></svg>
+      </div>
+      <p class="verified">Sent! Great job 🎉</p>
+      <p class="done-msg">Your score and homework photos have reached your math teacher. Well done for finishing!</p>
+      <div class="actions"><button type="button" class="start-btn green" id="done-view">View score and answers</button></div>
     </div>
   </div>
 </div>
@@ -1277,6 +1280,20 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
 .verified { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; color: #1c7a3f; }
 :root[data-theme="dark"] .verified { color: #6fe0a0; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .verified { color: #6fe0a0; } }
+/* Friendly green "Sent!" screen */
+#pane-done { align-items: center; text-align: center; }
+.sent-badge { width: 84px; height: 84px; margin: 4px auto 0; animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) backwards; }
+.sent-badge svg { width: 100%; height: 100%; display: block; }
+.sent-badge circle { fill: #1f9d57; }
+.sent-badge path { fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 40; animation: tick 0.5s ease-out 0.35s backwards; }
+@keyframes tick { from { stroke-dashoffset: 40; } }
+#pane-done .verified { font-size: 1.7rem; margin: 0; color: #178a4a; }
+:root[data-theme="dark"] #pane-done .verified { color: #6fe0a0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #pane-done .verified { color: #6fe0a0; } }
+#pane-done .done-msg { margin: 0; }
+#gate .start-btn.green { background: #1f9d57; color: #fff; }
+#gate .start-btn.green:hover { background: #178a4a; }
+@media (prefers-reduced-motion: reduce) { .sent-badge, .sent-badge path { animation: none; } }
 </style>
 <script>
 (function () {
