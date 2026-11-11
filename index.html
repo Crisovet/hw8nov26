@@ -1159,19 +1159,14 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
 
 <div class="overlay" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title" hidden>
   <div class="modal">
-    <h2 id="gate-title">Homework in your copy</h2>
+    <h2 id="gate-title">Before you submit</h2>
 
     <div class="pane" id="pane-ask">
-      <p>Have you written this homework in your copy (notebook)?</p>
+      <p><b>Kindly take photos of your homework before making the submission.</b></p>
       <div class="actions">
-        <button type="button" class="start-btn" id="gate-yes">I have written it in my copy</button>
-        <button type="button" class="start-btn alt" id="gate-no">I haven't written it yet</button>
+        <button type="button" class="start-btn alt" id="gate-no">I will go back and take photos of homework</button>
+        <button type="button" class="start-btn" id="gate-yes">I have taken the photos of the homework</button>
       </div>
-    </div>
-
-    <div class="pane" id="pane-later" hidden>
-      <p>Kindly write the homework in your copy first. When it is done, press the Submit button again and choose &ldquo;I have written it in my copy&rdquo;.</p>
-      <div class="actions"><button type="button" class="start-btn" id="gate-ok">OK</button></div>
     </div>
 
     <div class="pane" id="pane-cam" hidden>
@@ -1250,11 +1245,12 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
 </div>
 
 <style>
-/* Submit gate: "have you written it?" + camera check */
+/* Submit gate: "take photos" notice + gallery picker */
 #gate { z-index: 55; }
 #gate .pane[hidden] { display: none; }
 #gate .pane { display: flex; flex-direction: column; gap: 14px; }
 #gate .actions .alt { background: var(--sample); color: var(--ink); border: 2px solid var(--line); }
+#pane-ask p { color: var(--ink); font-size: 1.1rem; }
 .cam-instr { background: var(--note); border: 2px solid var(--note-rule); border-radius: 12px; padding: 10px 12px; color: var(--ink) !important; font-weight: 600; }
 .cam-frame { position: relative; border: 3px solid var(--line); border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 3 / 4; max-height: 52vh; width: 100%; display: grid; place-items: center; }
 .cam-frame video, .cam-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -1717,10 +1713,9 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
     f.remove();
   }
 
-  /* ================= Submit gate: written-in-copy check + camera + math verification ================= */
-  // Tuning knobs (teacher can adjust)
+  /* ================= Submit gate: "take photos" notice + gallery picker ================= */
   var gate = document.getElementById('gate');
-  var panes = ['ask', 'later', 'cam', 'check', 'done'];
+  var panes = ['ask', 'cam', 'check', 'done'];
   var camStatus = document.getElementById('cam-status');
   var verifiedOnce = false, photosB64 = [];
 
@@ -1756,9 +1751,9 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
     document.getElementById('send-photos').focus();
   }
 
+  // "I have taken the photos" opens the gallery picker; "I will go back" simply closes the popup
   document.getElementById('gate-yes').addEventListener('click', function () { showPane('cam'); camStatus.textContent = ''; });
-  document.getElementById('gate-no').addEventListener('click', function () { showPane('later'); document.getElementById('gate-ok').focus(); });
-  document.getElementById('gate-ok').addEventListener('click', closeGate);
+  document.getElementById('gate-no').addEventListener('click', closeGate);
   // Opens one photo and shrinks it straight away (max 1280px), so only one full-size image is ever in memory
   function loadSmall(file) {
     function toSmall(src, w, h) {
@@ -1841,7 +1836,7 @@ tbody tr + tr td { border-top: 2px solid var(--line); }
   document.getElementById('done-view').addEventListener('click', function () { closeGate(); showView(true); });
   document.getElementById('check-retake').addEventListener('click', function () { kept = []; addMode = false; showPane('cam'); camStatus.textContent = ''; });
 
-  // Submit button: unanswered-question check first, then the written-in-copy gate
+  // Submit button: unanswered-question check first, then the "take photos" notice
   btn.addEventListener('click', function () {
     if (resultSent) return;
     var keys = Object.keys(KEY), missing = false;
